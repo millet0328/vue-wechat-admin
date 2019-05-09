@@ -49,8 +49,8 @@
 						<button class="btn" type="button">注 册</button>
 					</div>
 					<div class="link-box">
-						<a href="#">密码登录</a>
-						<a href="#">忘记密码？</a>
+						<router-link to="/login">密码登录</router-link>
+						<router-link to="/register">忘记密码？</router-link>
 					</div>
 				</div>
 			</form>

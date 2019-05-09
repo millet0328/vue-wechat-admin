@@ -21,8 +21,8 @@
 						<button class="btn" @click="regHandle" type="button">注 册</button>
 					</div>
 					<div class="link-box">
-						<a href="#">注册账户</a>
-						<a href="#">忘记密码？</a>
+						<router-link to="/register">注册账户</router-link>
+						<router-link to="/register">忘记密码？</router-link>
 					</div>
 				</div>
 			</form>
