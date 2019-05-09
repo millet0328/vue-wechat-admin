@@ -1,23 +1,26 @@
+// 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(Router)
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
-  ]
+// 1. import 进来views文件夹下的页面级组件。
+import Login from './views/Login.vue';
+import Register from './views/Register.vue'
+/**
+ * 2. 定义路由
+ * 每个路由应该映射一个组件。
+ * 其中"component" 可以是通过 Vue.extend() 创建的组件构造器，
+ * 或者，只是一个组件配置对象。
+ */
+const routes = [
+	{ path: '/register', component: Register },
+	{ path: '/login', component: Login }
+]
+
+// 3. 创建 router 实例，然后传 `routes` 配置。
+const router = new Router({
+	routes // (缩写) 相当于 routes: routes
 })
+
+export default router
