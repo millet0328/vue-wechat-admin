@@ -14,8 +14,8 @@
 						<div class="add-on">
 							<i class="fa fa-lock"></i>
 						</div>
-						<input type="password" pattern="[1-9]\d{6,}" @blur="checkPassword" class="input-control"
-						 v-model="password" placeholder="请输入密码">
+						<input type="password" pattern="[1-9]\d{6,}" @blur="checkPassword" class="input-control" v-model="password"
+						 placeholder="请输入密码">
 					</div>
 					<div class="form-control">
 						<button class="btn" @click="regHandle" type="button">注 册</button>
@@ -60,11 +60,11 @@
 	}
 </script>
 
-<style lang="scss">
+<style scoped="scoped" lang="scss">
 	.bg {
 		width: 100vw;
 		height: 100vh;
-		background: url(../assets/img/reg/login-bg.jpg);
+		background: url(../../assets/img/reg/login-bg.jpg);
 		background-size: cover;
 		position: relative;
 
@@ -156,13 +156,19 @@
 
 			.error {
 
-				.add-on,
 				.input-control,
 				.sex-box {
 					border-color: red;
 				}
 			}
 
+			.link-box {
+				padding-top: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				font-size: 12px;
+			}
 		}
 	}
 </style>

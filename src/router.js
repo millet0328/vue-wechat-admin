@@ -4,13 +4,20 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 // 1. import 进来views文件夹下的页面级组件。
-import Login from './views/Login.vue';
-import Register from './views/Register.vue';
-import Index from './views/Index.vue';
+// 用户组
+import UserLogin from '@/views/User/Login.vue';
+import UserRegister from '@/views/User/Register.vue';
+import UserList from '@/views/User/List.vue';
+// 订单
+import OrderList from '@/views/Order/List.vue';
+// 管理员
+import Index from '@/views/Index.vue';
+import AdminLogin from '@/views/Admin/Login.vue';
+// 商品
 import GoodsCategory from '@/views/Goods/Category.vue';
 import GoodsList from "@/views/Goods/List";
-// import GoodsRelease from "@/views/Goods/Release";
-// import GoodsEdit from "@/views/Goods/Edit";
+import GoodsRelease from "@/views/Goods/Release";
+import GoodsEdit from "@/views/Goods/Edit";
 /**
  * 2. 定义路由
  * 每个路由应该映射一个组件。
@@ -19,13 +26,18 @@ import GoodsList from "@/views/Goods/List";
  */
 const routes = [{
 		path: '/register',
-		name: 'Register',
-		component: Register,
+		name: 'UserRegister',
+		component: UserRegister,
 	},
 	{
 		path: '/login',
-		name: 'Login',
-		component: Login,
+		name: 'UserLogin',
+		component: UserLogin,
+	},
+	{
+		path: '/admin',
+		name: 'AdminLogin',
+		component: AdminLogin,
 		alias: "/",
 	},
 	{
@@ -41,6 +53,24 @@ const routes = [{
 				path: "/goods/list",
 				name: "GoodsList",
 				component: GoodsList
+			},
+			{
+				path: "/goods/release",
+				name: "GoodsRelease",
+				component: GoodsRelease
+			},
+			{
+				path: "/goods/edit",
+				name: "GoodsEdit",
+				component: GoodsEdit
+			}, {
+				path: "/user/list",
+				name: "UserList",
+				component: UserList
+			}, {
+				path: "/order/list",
+				name: "OrderList",
+				component: OrderList
 			}
 		]
 	},

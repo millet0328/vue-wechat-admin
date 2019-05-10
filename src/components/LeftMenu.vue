@@ -12,11 +12,10 @@
 		<el-submenu index="2">
 			<template slot="title">
 				<i class="el-icon-user-solid"></i>
-				<span slot="title">客户管理</span>
+				<span slot="title">用户管理</span>
 			</template>
 			<el-menu-item-group>
-				<el-menu-item index="/customer/list">客户列表</el-menu-item>
-				<el-menu-item index="/customer/label">客户标签</el-menu-item>
+				<el-menu-item index="/user/list">用户列表</el-menu-item>
 			</el-menu-item-group>
 		</el-submenu>
 		<el-submenu index="3">
@@ -25,7 +24,7 @@
 				<span slot="title">订单管理</span>
 			</template>
 			<el-menu-item-group>
-				<el-menu-item index="/customer/list">订单列表</el-menu-item>
+				<el-menu-item index="/order/list">订单列表</el-menu-item>
 			</el-menu-item-group>
 		</el-submenu>
 	</el-menu>

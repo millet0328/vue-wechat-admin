@@ -62,11 +62,11 @@
 
 </script>
 
-<style lang="scss">
+<style scoped="scoped" lang="scss">
 	.bg {
 		width: 100vw;
 		height: 100vh;
-		background: url(../assets/img/reg/login-bg.jpg);
+		background: url(../../assets/img/reg/login-bg.jpg);
 		background-size: cover;
 		position: relative;
 
