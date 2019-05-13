@@ -8,19 +8,19 @@
 						<div class="add-on">
 							<i class="fa fa-user"></i>
 						</div>
-						<input type="text" class="input-control" placeholder="请输入账户名">
+						<input type="text" v-model="formData.username" class="input-control" placeholder="请输入账户名">
 					</div>
 					<div class="form-control">
 						<div class="add-on">
 							<i class="fa fa-lock"></i>
 						</div>
-						<input type="password" class="input-control" placeholder="请输入密码">
+						<input type="password" v-model="formData.password" class="input-control" placeholder="请输入密码">
 					</div>
 					<div class="form-control">
 						<div class="add-on">
 							<i class="fa fa-tag"></i>
 						</div>
-						<input type="text" class="input-control" placeholder="请输入昵称">
+						<input type="text" v-model="formData.nickname" class="input-control" placeholder="请输入昵称">
 					</div>
 					<div class="form-control">
 						<div class="add-on">
@@ -28,12 +28,12 @@
 						</div>
 						<div class="sex-box">
 							<label for="man">
-								<input checked="checked" name="sex" id="man" type="radio">
+								<input checked name="sex" v-model="formData.sex" value="男" id="man" type="radio">
 								<i class="fa fa-mars"></i>
 								男
 							</label>
 							<label for="woman">
-								<input name="sex" id="woman" type="radio">
+								<input id="woman" name="sex" v-model="formData.sex" value="女" type="radio">
 								<i class="fa fa-venus"></i>
 								女
 							</label>
@@ -43,10 +43,10 @@
 						<div class="add-on">
 							<i class="fa fa-mobile"></i>
 						</div>
-						<input type="number" class="input-control" placeholder="请输入手机号码">
+						<input type="number" v-model="formData.tel" class="input-control" placeholder="请输入手机号码">
 					</div>
 					<div class="form-control">
-						<button class="btn" type="button">注 册</button>
+						<button class="btn" @click="regHandle" type="button">注 册</button>
 					</div>
 					<div class="link-box">
 						<router-link to="/login">密码登录</router-link>
@@ -59,7 +59,44 @@
 </template>
 
 <script>
-
+	export default {
+		data() {
+			return {
+				formData: {
+					username: '',
+					password: '',
+					nickname: '',
+					sex: '',
+					tel: '',
+				}
+			}
+		},
+		methods: {
+			regHandle() {
+				// 1.表单验证
+				// 2.提取数据
+				this.$http
+					.post('/api/user/register', {
+						...this.formData
+					}).then((res) => {
+						if (res.data.status) {
+							// 储存token,uid
+							sessionStorage.token = res.data.data.token;
+							sessionStorage.uid = res.data.data.id;
+							// 跳转页面
+							this.$message({
+								message: res.data.msg,
+								onClose: () => {
+									this.$router.push('/index')
+								}
+							});
+						} else {
+							this.$message(res.data.msg);
+						}
+					});
+			}
+		}
+	}
 </script>
 
 <style scoped="scoped" lang="scss">

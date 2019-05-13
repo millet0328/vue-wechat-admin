@@ -5,9 +5,9 @@
 		<div class="pull-right">
 			<el-dropdown class="white" trigger="click">
 				<span class="am-text-middle am-margin-right-sm">
-					王小虎
+					{{nickname}}
 				</span>
-				<img class="am-text-middle" width="20" src="../assets/img/common/avator.png" />
+				<img class="am-text-middle" width="20" :src="avatar" />
 				<el-dropdown-menu slot="dropdown">
 					<el-dropdown-item>消息</el-dropdown-item>
 					<el-dropdown-item>设置</el-dropdown-item>
@@ -19,6 +19,33 @@
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				nickname: '',
+				avatar: '',
+			}
+		},
+		created() {
+			this.getUserInfo();
+		},
+		methods: {
+			getUserInfo() {
+				this.$http
+					.get('/api/user/info/', {
+						params: {
+							uid: sessionStorage.uid
+						}
+					})
+					.then((res) => {
+						if (res.data.status) {
+							this.nickname = res.data.data.nickname;
+							this.avatar = res.data.data.avatar;
+						}
+					});
+			}
+		}
+	}
 </script>
 
 <style scoped="scoped" lang="scss">

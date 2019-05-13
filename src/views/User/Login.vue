@@ -8,17 +8,17 @@
 						<div class="add-on">
 							<i class="fa fa-user"></i>
 						</div>
-						<input type="text" class="input-control" @blur="checkUsername" v-model="username" placeholder="请输入账户名">
+						<input type="text" class="input-control" @blur="checkUsername" v-model="formData.username" placeholder="请输入账户名">
 					</div>
 					<div class="form-control" :class="{error:!valid[1]}">
 						<div class="add-on">
 							<i class="fa fa-lock"></i>
 						</div>
-						<input type="password" pattern="[1-9]\d{6,}" @blur="checkPassword" class="input-control" v-model="password"
+						<input type="password" pattern="[1-9]\d{6,}" @blur="checkPassword" class="input-control" v-model="formData.password"
 						 placeholder="请输入密码">
 					</div>
 					<div class="form-control">
-						<button class="btn" @click="regHandle" type="button">注 册</button>
+						<button class="btn" @click="regHandle" type="button">登 录</button>
 					</div>
 					<div class="link-box">
 						<router-link to="/register">注册账户</router-link>
@@ -34,27 +34,52 @@
 	export default {
 		data() {
 			return {
-				username: "",
-				password: "",
+				formData: {
+					username: "",
+					password: "",
+				},
 				valid: [true, true],
 			}
 		},
 		methods: {
-			validHandle(e) {
-				console.log(e.target.pattern);
-			},
 			checkUsername() {
-
+				let usernameReg = /[A-Za-z0-9_-]{6,}/; //至少6位字母或者数字
+				let flag = usernameReg.test(this.formData.username);
+				this.$set(this.valid, 0, flag);
+				return flag;
 			},
 			checkPassword() {
-
+				let passwordReg = /\d{6,}/; //至少6位数字
+				let flag = passwordReg.test(this.formData.password);
+				this.$set(this.valid, 1, flag);
+				return flag;
 			},
 			regHandle() {
 				// 表单验证
-				let usernameReg = /[A-Za-z0-9_-]{6,}/; //至少6位字母或者数字
-				let passwordReg = /[1-9]\d{6,}/; //至少6位数字
-				this.$set(this.valid, 0, usernameReg.test(this.username));
-				this.$set(this.valid, 1, usernameReg.test(this.password));
+				let isValid = this.checkUsername() && this.checkPassword();
+				// 验证通过
+				if (isValid) {
+					this.$http
+						.post('/api/user/login', {
+							...this.formData
+						})
+						.then((res) => {
+							if (res.data.status) {
+								// 储存token,uid
+								sessionStorage.token = res.data.data.token;
+								sessionStorage.uid = res.data.data.id;
+								// 跳转页面
+								this.$message({
+									message: res.data.msg,
+									onClose: () => {
+										this.$router.push('/index')
+									}
+								});
+							} else {
+								this.$message(res.data.msg);
+							}
+						});
+				}
 			}
 		}
 	}
