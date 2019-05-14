@@ -12,7 +12,6 @@ import UserList from '@/views/User/List.vue';
 import OrderList from '@/views/Order/List.vue';
 // 管理员
 import Index from '@/views/Index.vue';
-import AdminLogin from '@/views/Admin/Login.vue';
 // 商品
 import GoodsCategory from '@/views/Goods/Category.vue';
 import GoodsList from "@/views/Goods/List";
@@ -30,47 +29,64 @@ const routes = [{
 		component: UserRegister,
 	},
 	{
-		path: '/login',
+		path: '/login/',
 		name: 'UserLogin',
 		component: UserLogin,
-	},
-	{
-		path: '/admin',
-		name: 'AdminLogin',
-		component: AdminLogin,
+		props: (route) => route.query,
 		alias: "/",
 	},
 	{
 		path: '/index',
 		name: 'Index',
 		component: Index,
+		meta: {
+			requiredAuth: true
+		},
 		children: [{
 				path: '/goods/category/',
 				name: 'GoodsCategory',
 				component: GoodsCategory,
+				meta: {
+					requiredAuth: true
+				},
 			},
 			{
 				path: "/goods/list",
 				name: "GoodsList",
-				component: GoodsList
+				component: GoodsList,
+				meta: {
+					requiredAuth: true
+				},
 			},
 			{
 				path: "/goods/release",
 				name: "GoodsRelease",
-				component: GoodsRelease
+				component: GoodsRelease,
+				meta: {
+					requiredAuth: true
+				},
 			},
 			{
 				path: "/goods/edit",
 				name: "GoodsEdit",
-				component: GoodsEdit
+				component: GoodsEdit,
+				meta: {
+					requiredAuth: true
+				},
 			}, {
 				path: "/user/list",
 				name: "UserList",
-				component: UserList
+				component: UserList,
+				meta: {
+					requiredAuth: true
+				},
 			}, {
 				path: "/order/list",
 				name: "OrderList",
-				component: OrderList
+				component: OrderList,
+				meta: {
+					requiredAuth: true
+				},
 			}
 		]
 	},
@@ -80,5 +96,25 @@ const routes = [{
 const router = new Router({
 	routes // (缩写) 相当于 routes: routes
 })
+// 4.全局路由守卫
+router.beforeEach((to, from, next) => {
+	if (to.matched.some(record => record.meta.requiredAuth)) {
+		// 无token,未登录
+		if (!sessionStorage.token) {
+			console.log("未登录");
+			next({
+				path: '/login',
+				query: {
+					redirect: to.fullPath
+				}
+			});
+			return;
+		}
+		// 已登录
+		next();
+	} else {
+		next();
+	}
+});
 
 export default router

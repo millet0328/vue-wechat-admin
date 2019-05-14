@@ -32,6 +32,7 @@
 
 <script>
 	export default {
+		props: ["redirect"],
 		data() {
 			return {
 				formData: {
@@ -40,6 +41,9 @@
 				},
 				valid: [true, true],
 			}
+		},
+		created() {
+			console.log(this.redirect);
 		},
 		methods: {
 			checkUsername() {
@@ -64,19 +68,23 @@
 							...this.formData
 						})
 						.then((res) => {
-							if (res.data.status) {
+							if (res.status) {
 								// 储存token,uid
-								sessionStorage.token = res.data.data.token;
-								sessionStorage.uid = res.data.data.id;
+								sessionStorage.token = res.data.token;
+								sessionStorage.uid = res.data.id;
 								// 跳转页面
 								this.$message({
-									message: res.data.msg,
+									message: res.msg,
 									onClose: () => {
+										if (this.redirect) {
+											this.$router.push(this.redirect);
+											return;
+										}
 										this.$router.push('/index')
 									}
 								});
 							} else {
-								this.$message(res.data.msg);
+								this.$message(res.msg);
 							}
 						});
 				}

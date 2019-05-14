@@ -35,12 +35,12 @@
 					.get('/api/user/info/', {
 						params: {
 							uid: sessionStorage.uid
-						}
+						},
 					})
 					.then((res) => {
 						if (res.data.status) {
-							this.nickname = res.data.data.nickname;
-							this.avatar = res.data.data.avatar;
+							this.nickname = res.data.nickname;
+							this.avatar = res.data.avatar;
 						}
 					});
 			}
