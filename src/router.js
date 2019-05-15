@@ -101,7 +101,6 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiredAuth)) {
 		// 无token,未登录
 		if (!sessionStorage.token) {
-			console.log("未登录");
 			next({
 				path: '/login',
 				query: {

@@ -86,22 +86,28 @@
 				<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
 			</el-form-item>
 			<el-form-item label="商品主图">
-				<el-upload :limit="1" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/goods/">
+				<el-upload :limit="1" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess"
+				 :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError" :on-preview="handleCardPreview"
+				 action="/api/upload/goods/">
 					<i class="el-icon-plus"></i>
 				</el-upload>
 				<el-dialog :visible.sync="dialogVisible">
 					<img width="100%" :src="dialogImageUrl" alt="">
 				</el-dialog>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸 800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<el-form-item label="商品轮播图">
-				<el-upload :limit="6" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove" :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/slider/">
+				<el-upload :limit="6" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleSliderSuccess"
+				 :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove" :on-error="handleError" :on-preview="handleCardPreview"
+				 action="/api/upload/slider/">
 					<i class="el-icon-plus"></i>
 				</el-upload>
 				<el-dialog :visible.sync="dialogVisible">
 					<img width="100%" :src="dialogImageUrl" alt="">
 				</el-dialog>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸 800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<div class="section-title">商品详情描述</div>
 			<el-form-item label="商品品牌">
@@ -179,9 +185,6 @@
 				cate_3rd_options: [],
 			};
 		},
-		created() {
-			this.cateChangeHandle(1, 'cate_1st');
-		},
 		mounted() {
 			var editor = new E(this.$refs.editor);
 			editor.customConfig.zIndex = 100
@@ -194,25 +197,28 @@
 			};
 			editor.create();
 		},
+		created() {
+			this.cateChangeHandle(1, 'cate_1st');
+		},
 		watch: {
-			'form.cate_1st' (newValue, oldValue) {
+			'form.cate_1st'(newValue, oldValue) {
 				this.cateChangeHandle(newValue, 'cate_2nd');
 			},
-			'form.cate_2nd' (newValue, oldValue) {
+			'form.cate_2nd'(newValue, oldValue) {
 				this.cateChangeHandle(newValue, 'cate_3rd');
 			},
 		},
 		methods: {
 			//分类change事件
 			cateChangeHandle(id, cate) {
-				if(!id) {
+				if (!id) {
 					return false;
 				}
 				this.getOptions(id).then((data) => {
 					//回调函数
 					this[cate + '_options'] = data;
 					//如果数组为空，下一级分类设置为空
-					if(data.length == 0) {
+					if (data.length == 0) {
 						this.form[cate] = '';
 						return false;
 					}
@@ -228,7 +234,7 @@
 						}
 					})
 					.then(function(result) {
-						if(result.status) {
+						if (result.status) {
 							//回调函数
 							return Promise.resolve(result.data);
 						} else {
@@ -237,7 +243,7 @@
 					});
 			},
 			handleMainSuccess(response, file, fileList) {
-				if(response.status) {
+				if (response.status) {
 					this.form.img_lg = response.lgImg;
 					this.form.img_md = response.mdImg;
 				}
@@ -249,16 +255,16 @@
 				let reg = /^image\/(jpe?g|png)$/;
 				const isJPG = reg.test(file.type);
 				const isLt2M = file.size / 1024 / 1024 < 2;
-				if(!isJPG) {
+				if (!isJPG) {
 					this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
 				}
-				if(!isLt2M) {
+				if (!isLt2M) {
 					this.$message.error('上传头像图片大小不能超过 2MB!');
 				}
 				return isJPG && isLt2M;
 			},
 			handleMainBeforeRemove(file, fileList) {
-				if(!file.response) {
+				if (!file.response) {
 					return;
 				}
 				this.axios
@@ -266,13 +272,13 @@
 						src: '.' + file.response.lgImg
 					})
 					.then((result) => {
-						if(result.status) {
+						if (result.status) {
 							return this.axios.post('/api/upload/delete/', {
 								src: '.' + file.response.mdImg
 							});
 						}
 					}).then((result) => {
-						if(result.status) {
+						if (result.status) {
 							//清空图片
 							this.form.img_lg = '';
 							this.form.img_md = '';
@@ -290,7 +296,7 @@
 				this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
 			handleSliderSuccess(response, file, fileList) {
-				if(response.status) {
+				if (response.status) {
 					this.form.slider = this.convertFileList(fileList);
 				}
 			},
@@ -298,7 +304,7 @@
 				this.$message.warning(`当前限制选择 6 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
 			handleSliderBeforeRemove(file, fileList) {
-				if(!file.response) {
+				if (!file.response) {
 					return;
 				}
 				this.axios
@@ -306,7 +312,7 @@
 						src: '.' + file.response.src
 					})
 					.then((result) => {
-						if(result.status) {
+						if (result.status) {
 							this.form.slider = this.convertFileList(fileList);
 							return true;
 						} else {
@@ -327,7 +333,7 @@
 				this.axios
 					.post("/api/goods/release/", this.form)
 					.then((result) => {
-						if(result.status) {
+						if (result.status) {
 							this.$router.go(0);
 							this.$message({
 								message: '发布商品成功！',
@@ -343,31 +349,31 @@
 	.title-box {
 		border-bottom: 1px solid #409eff;
 	}
-	
+
 	.title-box h3 {
 		margin-top: 0;
 	}
-	
+
 	.tip {
 		font-size: 12px;
 		color: #999;
 	}
-	
+
 	.section-title {
 		background-color: #f5f5f5;
 		padding: 10px;
 		margin-bottom: 10px;
 	}
-	
+
 	.el-upload img {
 		max-width: 100%;
 	}
-	
+
 	.w-e-toolbar {
 		border: 1px solid #ccc;
 		border-bottom: 0;
 	}
-	
+
 	.w-e-text-container {
 		border: 1px solid #ccc;
 		min-height: 1500px;

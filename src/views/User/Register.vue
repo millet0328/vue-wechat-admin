@@ -79,20 +79,22 @@
 					.post('/api/user/register', {
 						...this.formData
 					}).then((res) => {
-						if (res.data.status) {
-							// 储存token,uid
-							sessionStorage.token = res.data.data.token;
-							sessionStorage.uid = res.data.data.id;
-							// 跳转页面
-							this.$message({
-								message: res.data.msg,
-								onClose: () => {
-									this.$router.push('/index')
-								}
-							});
-						} else {
-							this.$message(res.data.msg);
+						if (!res.status) {
+							this.$message.error(res.msg);
+							return false;
 						}
+						// 储存token,uid
+						sessionStorage.token = res.data.token;
+						sessionStorage.uid = res.data.id;
+						// 跳转页面
+						this.$message({
+							message: res.msg,
+							type: 'success',
+							duration: 1000,
+							onClose: () => {
+								this.$router.push('/index')
+							}
+						});
 					});
 			}
 		}

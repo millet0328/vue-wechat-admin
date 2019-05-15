@@ -38,7 +38,7 @@
 						},
 					})
 					.then((res) => {
-						if (res.data.status) {
+						if (res.status) {
 							this.nickname = res.data.nickname;
 							this.avatar = res.data.avatar;
 						}

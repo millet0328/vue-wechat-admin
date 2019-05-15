@@ -42,9 +42,6 @@
 				valid: [true, true],
 			}
 		},
-		created() {
-			console.log(this.redirect);
-		},
 		methods: {
 			checkUsername() {
 				let usernameReg = /[A-Za-z0-9_-]{6,}/; //至少6位字母或者数字
@@ -68,24 +65,26 @@
 							...this.formData
 						})
 						.then((res) => {
-							if (res.status) {
-								// 储存token,uid
-								sessionStorage.token = res.data.token;
-								sessionStorage.uid = res.data.id;
-								// 跳转页面
-								this.$message({
-									message: res.msg,
-									onClose: () => {
-										if (this.redirect) {
-											this.$router.push(this.redirect);
-											return;
-										}
-										this.$router.push('/index')
-									}
-								});
-							} else {
-								this.$message(res.msg);
+							if (!res.status) {
+								this.$message.error(res.msg);
+								return false;
 							}
+							// 储存token,uid
+							sessionStorage.token = res.data.token;
+							sessionStorage.uid = res.data.id;
+							// 跳转页面
+							this.$message({
+								message: res.msg,
+								type: 'success',
+								duration: 1000,
+								onClose: () => {
+									if (this.redirect) {
+										this.$router.push(this.redirect);
+										return;
+									}
+									this.$router.push('/index')
+								}
+							});
 						});
 				}
 			}
