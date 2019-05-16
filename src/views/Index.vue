@@ -4,9 +4,7 @@
 			<HeaderBar></HeaderBar>
 		</el-header>
 		<el-container>
-			<el-aside width="201px">
-				<LeftMenu></LeftMenu>
-			</el-aside>
+			<LeftMenu></LeftMenu>
 			<el-main>
 				<router-view></router-view>
 			</el-main>
@@ -21,7 +19,7 @@
 		components: {
 			HeaderBar,
 			LeftMenu
-		}
+		},
 	}
 </script>
 <style lang="scss">

@@ -1,7 +1,7 @@
 <template>
 	<div class="clearfix">
 		<img src="../assets/img/common/logo.png" class="am-text-middle" height="40" />
-		<i class="el-icon-menu am-text-middle am-margin-left-xl"></i>
+		<i @click="collapseHandle" class="el-icon-menu am-text-middle am-margin-left-xl"></i>
 		<div class="pull-right">
 			<el-dropdown class="white" trigger="click">
 				<span class="am-text-middle am-margin-right-sm">
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex';
+
 	export default {
 		data() {
 			return {
@@ -30,6 +32,9 @@
 			this.getUserInfo();
 		},
 		methods: {
+			collapseHandle() {
+				this.$store.commit("collapseMenu");
+			},
 			getUserInfo() {
 				this.$http
 					.get('/api/user/info/', {

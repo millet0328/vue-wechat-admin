@@ -189,7 +189,7 @@
 			var editor = new E(this.$refs.editor);
 			editor.customConfig.zIndex = 100
 			//配置上传图片
-			editor.customConfig.uploadImgServer = '/api/upload/common/';
+			editor.customConfig.uploadImgServer = '/api/upload/editor/';
 			editor.customConfig.uploadFileName = 'file';
 			//同步HTML代码至data
 			editor.customConfig.onchange = html => {

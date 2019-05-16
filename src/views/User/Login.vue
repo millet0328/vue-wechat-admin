@@ -60,32 +60,34 @@
 				let isValid = this.checkUsername() && this.checkPassword();
 				// 验证通过
 				if (isValid) {
-					this.$http
-						.post('/api/user/login', {
-							...this.formData
-						})
-						.then((res) => {
-							if (!res.status) {
-								this.$message.error(res.msg);
-								return false;
-							}
-							// 储存token,uid
-							sessionStorage.token = res.data.token;
-							sessionStorage.uid = res.data.id;
-							// 跳转页面
-							this.$message({
-								message: res.msg,
-								type: 'success',
-								duration: 1000,
-								onClose: () => {
-									if (this.redirect) {
-										this.$router.push(this.redirect);
-										return;
-									}
-									this.$router.push('/index')
-								}
-							});
-						});
+					this.$store.dispatch('Login', { ...this.formData });
+					// this.$http
+					// 	.post('/api/user/login', {
+					// 		...this.formData
+					// 	})
+					// 	.then((res) => {
+					// 		if (!res.status) {
+					// 			this.$message.error(res.msg);
+					// 			return false;
+					// 		}
+					// 		// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
+					// 		sessionStorage.token = res.data.token;
+					// 		sessionStorage.uid = res.data.id;
+					// 		sessionStorage.role = res.data.role;
+					// 		// 跳转页面
+					// 		this.$message({
+					// 			message: res.msg,
+					// 			type: 'success',
+					// 			duration: 1000,
+					// 			onClose: () => {
+					// 				if (this.redirect) {
+					// 					this.$router.push(this.redirect);
+					// 					return;
+					// 				}
+					// 				this.$router.push('/index')
+					// 			}
+					// 		});
+					// 	});
 				}
 			}
 		}
