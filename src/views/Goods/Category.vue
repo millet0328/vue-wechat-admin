@@ -13,7 +13,7 @@
 			</div>
 		</div>
 		<!-- 树形组件 -->
-		<el-tree lazy node-key="id" :load="loadNode" :props="defaultProps">
+		<el-tree ref="tree" lazy node-key="id" :load="loadNode" :props="defaultProps">
 			<div class="node-box" slot-scope="{ node, data }">
 				<span class="node-name">{{ node.label }}</span>
 				<span class="node-action">
@@ -30,25 +30,26 @@
 			</div>
 		</el-tree>
 		<!-- 编辑Modal -->
-		<el-dialog title="编辑节点" :visible.sync="EditModalVisible">
+		<el-dialog title="编辑节点" :before-close="closeModal" :visible.sync="EditModalVisible">
 			<el-form label-width="80px" :label-position="'left'">
 				<el-form-item label="名称">
-					<el-input autocomplete="off"></el-input>
+					<el-input v-model="EditForm.name" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload action="https://jsonplaceholder.typicode.com/posts/" class="avatar-uploader">
-						<!-- <img class="avatar"> -->
-						<i class="el-icon-plus avatar-uploader-icon"></i>
+					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="uploadSuccess"
+					 :before-upload="beforeUpload" :show-file-list="false">
+						<img v-if="EditForm.img" :src="EditForm.img" class="photo">
+						<i v-else class="el-icon-plus photo-uploader-icon"></i>
 					</el-upload>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="EditModalVisible = false">取 消</el-button>
-				<el-button type="primary" @click="EditModalVisible = false">确 定</el-button>
+				<el-button type="primary" @click="UpdateNodeHandle">确 定</el-button>
 			</div>
 		</el-dialog>
 		<!-- 添加Modal -->
-		<el-dialog title="添加节点" :visible.sync="AddModalVisible">
+		<el-dialog title="添加节点" :before-close="closeModal" :visible.sync="AddModalVisible">
 			<el-form label-width="80px" :label-position="'left'">
 				<el-form-item label="名称">
 					<el-input v-model="AddForm.name" autocomplete="off"></el-input>
@@ -63,7 +64,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="AddModalVisible = false">取 消</el-button>
-				<el-button type="primary" @click="confirmAddHandle">确 定</el-button>
+				<el-button type="primary" @click="AddNodeHandle">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -80,6 +81,11 @@
 					Authorization: `Bearer ${sessionStorage.token}`
 				},
 				EditModalVisible: false,
+				EditForm: {
+					name: "",
+					pId: '',
+					img: ''
+				},
 				AddModalVisible: false,
 				AddForm: {
 					name: "",
@@ -93,7 +99,7 @@
 			loadNode(node, resolve) {
 				// 根节点level==0
 				if (node.level === 0) {
-					return resolve([{ name: '全部分类', id: 1 }]);
+					return resolve([{ name: '全部分类', id: 1, img: '' }]);
 				}
 				this.$http.get('/api/category/sub', {
 					params: {
@@ -103,9 +109,33 @@
 					resolve(res.data);
 				});
 			},
+			// 打开编辑Modal
+			openEditModal(node, data) {
+				this.EditModalVisible = true;
+				this.EditForm = { ...data };
+				// 转存node节点
+				this.currentNode = node;
+			},
+			// 更新节点
+			UpdateNodeHandle() {
+				this.$http
+					.post('/api/category/update/', {
+						...this.EditForm
+					})
+					.then((res) => {
+						if (res.status) {
+							this.$message(res.msg);
+							this.EditModalVisible = false;
+							// 更新节点
+							this.currentNode.data = { ...this.EditForm }
+						}
+					});
+			},
 			// 关闭弹窗清空表单
-
-			// 打开弹窗获取pId
+			closeModal(done) {
+				done();
+			},
+			// 打开添加Modal获取pId
 			openAddModal(node, data) {
 				this.AddForm.pId = data.id;
 				this.AddModalVisible = true;
@@ -113,7 +143,7 @@
 				this.currentNodeData = data;
 			},
 			// 确认添加节点
-			confirmAddHandle() {
+			AddNodeHandle() {
 				// 1.表单验证
 				// 2.发送数据
 				this.$http
