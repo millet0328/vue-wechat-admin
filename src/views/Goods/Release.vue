@@ -116,7 +116,7 @@
 				</el-col>
 			</el-form-item>
 			<el-form-item label="商品描述">
-				<div id="toolbar" class="w-e-toolbar"></div>
+				<div ref="toolbar" class="w-e-toolbar"></div>
 				<div ref="editor" class="w-e-text-container"></div>
 			</el-form-item>
 			<div class="section-title">商品物流信息</div>
@@ -186,7 +186,7 @@
 			};
 		},
 		mounted() {
-			var editor = new E(this.$refs.editor);
+			var editor = new E(this.$refs.toolbar,this.$refs.editor);
 			editor.customConfig.zIndex = 100
 			//配置上传图片
 			editor.customConfig.uploadImgServer = '/api/upload/editor/';

@@ -26,7 +26,9 @@
 					<router-link :to="{ name: 'GoodsEdit', params: { id: scope.row.id }}">
 						<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
 					</router-link>
-					<el-button @click.native.prevent="deleteRow(scope.row.id)" icon="el-icon-delete" type="danger" plain size="small"></el-button>
+
+					<el-button @click.native.prevent="deleteRow(scope.row.id)" icon="el-icon-delete" class="deleteBtn" type="danger"
+					 plain size="small"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -60,12 +62,12 @@
 						}
 					})
 					.then((result) => {
-						if(result.status) {
+						if (result.status) {
 							result.data.forEach(function(item, index) {
 								item.create_time = new Date(item.create_time).toLocaleString()
 							})
 							this.tableData = result.data;
-						} 
+						}
 					})
 			},
 			deleteRow(id) {
@@ -79,13 +81,19 @@
 	.goods {
 		display: flex;
 		align-items: center;
+
 		.img {
 			margin-right: 6px;
 			border: 1px solid #eee;
 		}
+
 		.img img {
 			width: 80px;
 			display: block;
 		}
+	}
+
+	.deleteBtn {
+		margin-left: 10px;
 	}
 </style>

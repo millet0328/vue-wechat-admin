@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
-import { Message } from 'element-ui';
-import router from './router';
 
 Vue.use(Vuex);
 // 用户模块
@@ -21,32 +19,19 @@ let UserModule = {
 	},
 	actions: {
 		Login({ commit, state }, formData) {
-			axios
-				.post('/api/user/login', formData)
-				.then((res) => {
-					if (!res.status) {
-						Message.error(res.msg);
-						return;
-					}
-					// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-					sessionStorage.token = res.data.token;
-					sessionStorage.uid = res.data.id;
-					sessionStorage.role = res.data.role;
-					// 储存到state
-					commit('saveUserInfo', res.data);
-					Message({
-						message: res.msg,
-						type: 'success',
-						duration: 1000,
-						onClose: () => {
-							if (this.redirect) {
-								router.push(this.redirect);
-								return;
-							}
-							router.push('/index')
+			return new Promise((resolve, reject) => {
+				axios
+					.post('/api/user/login', formData)
+					.then((res) => {
+						if (!res.status) {
+							reject(res);
+							return;
 						}
-					});
-				})
+						// 储存到state
+						commit('saveUserInfo', res.data);
+						resolve(res);
+					})
+			});
 		},
 	}
 }
