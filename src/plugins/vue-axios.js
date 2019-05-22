@@ -8,7 +8,7 @@ axios.interceptors.request.use(function(config) {
 	// 在发送请求之前做些什么
 	// 排除登录、注册两个api
 	loading = Loading.service({ background: 'rgba(0, 0, 0, 0.8)' });
-	if (config.url == '/api/user/login' || config.url == '/api/user/register') {
+	if (config.url == '/api/admin/login' || config.url == '/api/admin/register') {
 		return config;
 	}
 	if (sessionStorage.token) {

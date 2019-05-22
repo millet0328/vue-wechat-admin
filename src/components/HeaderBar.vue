@@ -33,7 +33,7 @@
 		},
 		methods: {
 			collapseHandle() {
-				this.$store.commit("collapseMenu");
+				this.$store.commit("toggleMenu");
 			},
 			getUserInfo() {
 				this.$http

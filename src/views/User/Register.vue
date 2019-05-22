@@ -75,17 +75,13 @@
 			regHandle() {
 				// 1.表单验证
 				// 2.提取数据
-				this.$http
-					.post('/api/user/register', {
-						...this.formData
-					}).then((res) => {
-						if (!res.status) {
-							this.$message.error(res.msg);
-							return false;
-						}
-						// 储存token,uid
+				this.$store
+					.dispatch('user/Register', { ...this.formData })
+					.then((res) => {
+						// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
 						sessionStorage.token = res.data.token;
 						sessionStorage.uid = res.data.id;
+						sessionStorage.role = res.data.role;
 						// 跳转页面
 						this.$message({
 							message: res.msg,
@@ -95,8 +91,11 @@
 								this.$router.push('/index')
 							}
 						});
-					});
-			}
+					})
+					.catch((res) => {
+						this.$message.error(res.msg);
+					})
+			},
 		}
 	}
 </script>

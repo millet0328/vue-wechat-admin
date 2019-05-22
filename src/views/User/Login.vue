@@ -61,7 +61,7 @@
 				// 验证通过
 				if (isValid) {
 					this.$store
-						.dispatch('Login', { ...this.formData })
+						.dispatch('user/Login', { ...this.formData })
 						.then((res) => {
 							// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
 							sessionStorage.token = res.data.token;
