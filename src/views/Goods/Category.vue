@@ -71,6 +71,7 @@
 </template>
 
 <script>
+	import { Category } from '@/api/index';
 	export default {
 		data() {
 			return {
@@ -102,13 +103,9 @@
 				if (node.level === 0) {
 					return resolve([{ name: '全部分类', id: 1, img: '' }]);
 				}
-				this.$http.get('/api/category/sub', {
-					params: {
-						pId: node.data.id
-					}
-				}).then((res) => {
+				Category.load({ pId: node.data.id }).then((res) => {
 					resolve(res.data);
-				});
+				})
 			},
 			// 打开编辑Modal
 			openEditModal(node, data) {
@@ -119,18 +116,14 @@
 			},
 			// 更新节点
 			UpdateNodeHandle() {
-				this.$http
-					.post('/api/category/update/', {
-						...this.editForm
-					})
-					.then((res) => {
-						if (res.status) {
-							this.$message(res.msg);
-							this.EditModalVisible = false;
-							// 更新节点
-							this.currentNode.data = { ...this.editForm }
-						}
-					});
+				Category.update({ ...this.editForm }).then((res) => {
+					if (res.status) {
+						this.$message.success(res.msg);
+						this.EditModalVisible = false;
+						// 更新节点
+						this.currentNode.data = { ...this.editForm }
+					}
+				})
 			},
 			// 打开添加Modal获取pId
 			openAddModal(node, data) {
@@ -143,36 +136,41 @@
 			AddNodeHandle() {
 				// 1.表单验证
 				// 2.发送数据
-				this.$http
-					.post("/api/category/add/", {
-						...this.addForm
-					})
-					.then((res) => {
-						if (res.status) {
-							this.$message(res.msg);
-							this.AddModalVisible = false;
-							// 添加子节点
-							let data = this.currentNodeData;
-							let newChild = { ...this.addForm, ...res.data };
-							if (!data.children) {
-								this.$set(data, 'children', []);
-							}
-							data.children.push(newChild);
-						}
-					});
+				Category.add({ ...this.addForm }).then((res) => {
+					if (!res.status) {
+						this.$message.error(res.msg);
+						return;
+					}
+					this.$message.success(res.msg);
+					this.AddModalVisible = false;
+					// 添加子节点
+					let data = this.currentNodeData;
+					let newChild = { ...this.addForm, ...res.data };
+					if (!data.children) {
+						this.$set(data, 'children', []);
+					}
+					data.children.push(newChild);
+				})
 			},
 			// 删除
 			openDeleteModal(node, data) {
 				this.$msgbox({
-					type: 'warning',
-					title: "",
-					message: '此操作将永久删除该分类, 是否继续?'
-				}).then(() => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					});
-				})
+						type: 'warning',
+						title: "",
+						message: '此操作将永久删除该分类, 是否继续?'
+					})
+					.then(() => {
+						Category.remove({ id: data.id }).then(res => {
+							if (res.status) {
+								node.remove();
+								this.$message({
+									type: 'success',
+									message: '删除成功!'
+								});
+							}
+						})
+
+					})
 			},
 			// 上传图片之前的检查
 			beforeUpload(file) {
