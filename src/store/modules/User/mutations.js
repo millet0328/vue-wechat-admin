@@ -1,8 +1,6 @@
-const SaveUserInfo = (state, user) => {
-	state.uid = user.id;
-	state.token = user.token;
-	state.role = user.role;
+const SetUserInfo = (state, user) => {
+	state.userInfo = user;
 }
 export default {
-	SaveUserInfo,
+	SetUserInfo,
 }

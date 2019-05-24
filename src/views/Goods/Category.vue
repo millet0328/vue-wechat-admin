@@ -30,15 +30,15 @@
 			</div>
 		</el-tree>
 		<!-- 编辑Modal -->
-		<el-dialog title="编辑节点" :before-close="closeModal" :visible.sync="EditModalVisible">
+		<el-dialog title="编辑节点" :visible.sync="EditModalVisible">
 			<el-form label-width="80px" :label-position="'left'">
 				<el-form-item label="名称">
-					<el-input v-model="EditForm.name" autocomplete="off"></el-input>
+					<el-input v-model="editForm.name" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="uploadSuccess"
+					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="editUploadSuccess"
 					 :before-upload="beforeUpload" :show-file-list="false">
-						<img v-if="EditForm.img" :src="EditForm.img" class="photo">
+						<img v-if="editForm.img" :src="editForm.img" class="photo">
 						<i v-else class="el-icon-plus photo-uploader-icon"></i>
 					</el-upload>
 				</el-form-item>
@@ -49,15 +49,15 @@
 			</div>
 		</el-dialog>
 		<!-- 添加Modal -->
-		<el-dialog title="添加节点" :before-close="closeModal" :visible.sync="AddModalVisible">
+		<el-dialog title="添加节点" :visible.sync="AddModalVisible">
 			<el-form label-width="80px" :label-position="'left'">
 				<el-form-item label="名称">
-					<el-input v-model="AddForm.name" autocomplete="off"></el-input>
+					<el-input v-model="addForm.name" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="uploadSuccess"
+					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="addUploadSuccess"
 					 :before-upload="beforeUpload" :show-file-list="false">
-						<img v-if="AddForm.img" :src="AddForm.img" class="photo">
+						<img v-if="addForm.img" :src="addForm.img" class="photo">
 						<i v-else class="el-icon-plus photo-uploader-icon"></i>
 					</el-upload>
 				</el-form-item>
@@ -81,18 +81,19 @@
 					Authorization: `Bearer ${sessionStorage.token}`
 				},
 				EditModalVisible: false,
-				EditForm: {
+				editForm: {
 					name: "",
 					pId: '',
 					img: ''
 				},
 				AddModalVisible: false,
-				AddForm: {
+				addForm: {
 					name: "",
 					pId: '',
 					img: ''
 				},
 				currentNodeData: '',
+				currentNode: '',
 			}
 		},
 		methods: {
@@ -112,7 +113,7 @@
 			// 打开编辑Modal
 			openEditModal(node, data) {
 				this.EditModalVisible = true;
-				this.EditForm = { ...data };
+				this.editForm = { ...data };
 				// 转存node节点
 				this.currentNode = node;
 			},
@@ -120,24 +121,20 @@
 			UpdateNodeHandle() {
 				this.$http
 					.post('/api/category/update/', {
-						...this.EditForm
+						...this.editForm
 					})
 					.then((res) => {
 						if (res.status) {
 							this.$message(res.msg);
 							this.EditModalVisible = false;
 							// 更新节点
-							this.currentNode.data = { ...this.EditForm }
+							this.currentNode.data = { ...this.editForm }
 						}
 					});
 			},
-			// 关闭弹窗清空表单
-			closeModal(done) {
-				done();
-			},
 			// 打开添加Modal获取pId
 			openAddModal(node, data) {
-				this.AddForm.pId = data.id;
+				this.addForm.pId = data.id;
 				this.AddModalVisible = true;
 				// 转存data
 				this.currentNodeData = data;
@@ -148,7 +145,7 @@
 				// 2.发送数据
 				this.$http
 					.post("/api/category/add/", {
-						...this.AddForm
+						...this.addForm
 					})
 					.then((res) => {
 						if (res.status) {
@@ -156,13 +153,26 @@
 							this.AddModalVisible = false;
 							// 添加子节点
 							let data = this.currentNodeData;
-							let newChild = { ...this.AddForm, ...res.data };
+							let newChild = { ...this.addForm, ...res.data };
 							if (!data.children) {
 								this.$set(data, 'children', []);
 							}
 							data.children.push(newChild);
 						}
 					});
+			},
+			// 删除
+			openDeleteModal(node, data) {
+				this.$msgbox({
+					type: 'warning',
+					title: "",
+					message: '此操作将永久删除该分类, 是否继续?'
+				}).then(() => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					});
+				})
 			},
 			// 上传图片之前的检查
 			beforeUpload(file) {
@@ -177,10 +187,13 @@
 				}
 				return isJPG && isLt2M;
 			},
-			// 上传成功
-			uploadSuccess(res, file) {
-				console.log(res);
-				this.AddForm.img = res.data[0];
+			// 添加Modal上传成功
+			addUploadSuccess(res, file) {
+				this.addForm.img = res.src;
+			},
+			// 编辑Modal上传成功
+			editUploadSuccess(res, file) {
+				this.editForm.img = res.src;
 			},
 		}
 	}

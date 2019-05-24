@@ -19,35 +19,27 @@
 </template>
 
 <script>
-	import { mapState } from 'vuex';
+	import { mapGetters } from 'vuex';
 
 	export default {
 		data() {
 			return {
-				nickname: '',
-				avatar: '',
+
 			}
 		},
 		created() {
 			this.getUserInfo();
 		},
+		computed: {
+			...mapGetters('user', ['nickname', 'avatar'])
+		},
 		methods: {
 			collapseHandle() {
-				this.$store.commit("toggleMenu");
+				this.$store.commit("menu/toggleMenu");
 			},
 			getUserInfo() {
-				this.$http
-					.get('/api/user/info/', {
-						params: {
-							uid: sessionStorage.uid
-						},
-					})
-					.then((res) => {
-						if (res.status) {
-							this.nickname = res.data.nickname;
-							this.avatar = res.data.avatar;
-						}
-					});
+				this.$store
+					.dispatch("user/GetUserInfo", { uid: sessionStorage.uid })
 			}
 		}
 	}

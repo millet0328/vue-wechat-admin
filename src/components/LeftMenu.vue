@@ -38,12 +38,17 @@
 </template>
 
 <script>
-	import { mapState } from 'vuex';
+	import { mapState, mapGetters } from 'vuex';
 	export default {
-		computed: mapState({
-			isCollapse: state => state.menu.isCollapse,
-			role: state => state.user.role,
-		}),
+		computed: {
+			...mapState({
+				isCollapse: state => state.menu.isCollapse,
+			}),
+			...mapGetters({
+				role: 'user/role',
+			})
+		}
+
 	}
 </script>
 

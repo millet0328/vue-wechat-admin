@@ -18,7 +18,7 @@
 						 placeholder="请输入密码">
 					</div>
 					<div class="form-control">
-						<button class="btn" @click="regHandle" type="button">登 录</button>
+						<button class="btn" @click.enter="regHandle" type="button">登 录</button>
 					</div>
 					<div class="link-box">
 						<router-link to="/register">注册账户</router-link>
