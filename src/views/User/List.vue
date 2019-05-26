@@ -64,8 +64,7 @@
 				</el-form-item>
 				<el-form-item label="权限" label-width="100px">
 					<el-select v-model="form.role" placeholder="请选择账户">
-						<el-option label="区域一" value="shanghai"></el-option>
-						<el-option label="区域二" value="beijing"></el-option>
+						<el-option v-for="item in roles" :key="item.id" :label="item.role_name" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
 			</el-form>
@@ -82,12 +81,13 @@
 
 <script>
 	//引入service模块
-	import { User } from '@/api/index'
+	import { User, Authority } from '@/api/index'
 	export default {
 		name: "list",
 		data() {
 			return {
 				tableData: [],
+				roles: [],
 				editModalShow: true,
 				form: {
 					name: "",
@@ -95,13 +95,13 @@
 					sex: "男",
 					tel: "",
 					role: "",
-					role_name: "",
 					avatar: "",
 				},
 			};
 		},
 		created() {
 			this.loadList();
+			this.loadRole();
 		},
 		methods: {
 			loadList(index) {
@@ -109,6 +109,14 @@
 					.then((res) => {
 						if (res.status) {
 							this.tableData = res.data;
+						}
+					});
+			},
+			loadRole() {
+				Authority.loadRole()
+					.then(res => {
+						if (res.status) {
+							this.roles = res.data;
 						}
 					});
 			},
