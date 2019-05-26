@@ -67,7 +67,7 @@ const routes = [{
 				},
 			},
 			{
-				path: "/goods/edit",
+				path: "/goods/edit/:id",
 				name: "GoodsEdit",
 				component: GoodsEdit,
 				meta: {

@@ -19,7 +19,7 @@
 				<el-button type="primary">查询</el-button>
 			</el-form-item>
 		</el-form>
-		<el-table ref="multipleTable" tooltip-effect="dark" style="width: 100%" :data="tableData">
+		<el-table ref="multipleTable" style="width: 100%" :data="tableData">
 			<el-table-column prop="id" label="#">
 			</el-table-column>
 			<el-table-column sortable label="头像">
@@ -37,17 +37,43 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
+					<el-button type="primary" @click="showEditModal" plain icon="el-icon-edit" size="small"></el-button>
 					<el-button icon="el-icon-delete" type="danger" plain size="small"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		<el-pagination background layout="prev, pager, next" :total="120">
 		</el-pagination>
-		<!--新增数据-->
-
 		<!--编辑数据-->
-
+		<el-dialog title="收货地址" :visible.sync="editModalShow">
+			<el-form :model="form" label-position="left">
+				<el-form-item label="账号" label-width="100px">
+					<el-input v-model="form.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="昵称" label-width="100px">
+					<el-input v-model="form.nickname" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="性别" label-width="100px">
+					<el-radio-group v-model="form.sex">
+						<el-radio label="男">男</el-radio>
+						<el-radio label="女">女</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="手机号码" label-width="100px">
+					<el-input v-model.number="form.tel" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="权限" label-width="100px">
+					<el-select v-model="form.role" placeholder="请选择账户">
+						<el-option label="区域一" value="shanghai"></el-option>
+						<el-option label="区域二" value="beijing"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="editModalShow = false">取 消</el-button>
+				<el-button type="primary" @click="editModalShow = false">确 定</el-button>
+			</div>
+		</el-dialog>
 		<!--确认删除-->
 
 	</div>
@@ -56,17 +82,21 @@
 
 <script>
 	//引入service模块
+	import { User } from '@/api/index'
 	export default {
 		name: "list",
 		data() {
 			return {
 				tableData: [],
+				editModalShow: true,
 				form: {
 					name: "",
-					sex: "",
-					age: 0,
-					birthday: "",
-					address: ""
+					nickname: "",
+					sex: "男",
+					tel: "",
+					role: "",
+					role_name: "",
+					avatar: "",
 				},
 			};
 		},
@@ -75,13 +105,15 @@
 		},
 		methods: {
 			loadList(index) {
-				this.$http
-					.get("/api/user/list")
+				User.list()
 					.then((res) => {
 						if (res.status) {
 							this.tableData = res.data;
 						}
 					});
+			},
+			showEditModal() {
+				this.editModalShow = true;
 			},
 			handleEdit(index, row) {
 				this.editing = true;

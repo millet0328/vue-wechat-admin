@@ -43,6 +43,7 @@
 	</div>
 </template>
 <script>
+	import { Goods } from '@/api/index';
 	export default {
 		data() {
 			return {
@@ -55,12 +56,8 @@
 		},
 		methods: {
 			getGoodsList() {
-				this.axios
-					.get('/api/goods/', {
-						params: {
-							pageSize: 100
-						}
-					})
+				Goods
+					.list({ pageSize: 100 })
 					.then((result) => {
 						if (result.status) {
 							result.data.forEach(function(item, index) {

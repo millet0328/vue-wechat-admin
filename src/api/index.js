@@ -1,7 +1,9 @@
-import UserModule from './modules/user';
-import CategoryModule from './modules/category';
+import UserModule from './modules/User';
+import CategoryModule from './modules/Category';
+import GoodsModule from './modules/Goods';
 
 export {
 	UserModule as User,
-	CategoryModule as Category
+	CategoryModule as Category,
+	GoodsModule as Goods,
 }
