@@ -12,5 +12,5 @@ export default {
 	login,
 	register,
 	getUserInfo,
-	list,
+	list
 }

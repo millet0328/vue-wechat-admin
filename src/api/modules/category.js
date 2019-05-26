@@ -12,5 +12,5 @@ export default {
 	add,
 	remove,
 	update,
-	load
+	load,
 }
