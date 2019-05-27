@@ -8,9 +8,12 @@ const getUserInfo = (formData) => axios.get('/api/admin/info', { params: formDat
 
 const list = (formData) => axios.get('/api/admin/list', { params: formData });
 
+const updateUserInfo = (formData) => axios.post('/api/admin/info/update', formData);
+
 export default {
 	login,
 	register,
 	getUserInfo,
-	list
+	list,
+	updateUserInfo
 }

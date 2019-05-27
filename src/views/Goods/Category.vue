@@ -38,8 +38,10 @@
 				<el-form-item label="图片">
 					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="editUploadSuccess"
 					 :before-upload="beforeUpload" :show-file-list="false">
-						<img v-if="editForm.img" :src="editForm.img" class="photo">
-						<i v-else class="el-icon-plus photo-uploader-icon"></i>
+						<div class="el-upload">
+							<img v-if="editForm.img" :src="editForm.img" class="photo">
+							<i v-else class="el-icon-plus photo-uploader-icon"></i>
+						</div>
 					</el-upload>
 				</el-form-item>
 			</el-form>
@@ -57,8 +59,10 @@
 				<el-form-item label="图片">
 					<el-upload class="photo-uploader" action="/api/upload/common/" :headers="headers" :on-success="addUploadSuccess"
 					 :before-upload="beforeUpload" :show-file-list="false">
-						<img v-if="addForm.img" :src="addForm.img" class="photo">
-						<i v-else class="el-icon-plus photo-uploader-icon"></i>
+						<div class="el-upload">
+							<img v-if="addForm.img" :src="addForm.img" class="photo">
+							<i v-else class="el-icon-plus photo-uploader-icon"></i>
+						</div>
 					</el-upload>
 				</el-form-item>
 			</el-form>
