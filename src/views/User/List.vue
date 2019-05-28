@@ -24,7 +24,7 @@
 			</el-table-column>
 			<el-table-column sortable label="头像">
 				<template slot-scope="scope">
-					<img :src="scope.row.avatar" width="60" alt="">
+					<img :src="scope.row.avatar" class="avatar" width="60" alt="">
 				</template>
 			</el-table-column>
 			<el-table-column prop="username" sortable label="账号">
@@ -66,7 +66,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="头像" label-width="100px">
-					<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+					<el-upload class="avatar-uploader" action="/api/upload/avatar/" :headers="headers" :show-file-list="false"
 					 :on-success="editUploadSuccess" :before-upload="beforeUpload">
 						<div class="el-upload">
 							<img v-if="form.avatar" :src="form.avatar" class="avatar">
@@ -96,6 +96,9 @@
 			return {
 				tableData: [],
 				roles: [],
+				headers: {
+					Authorization: `Bearer ${sessionStorage.token}`
+				},
 				editModalShow: false,
 				form: {
 					uid: "",
@@ -172,6 +175,10 @@
 		margin: 0;
 	}
 
+	.cell .avatar {
+		border-radius: 50%;
+	}
+
 	.avatar-uploader .el-upload {
 		border: 1px dashed #d9d9d9;
 		border-radius: 6px;
@@ -193,7 +200,7 @@
 		text-align: center;
 	}
 
-	.avatar {
+	.el-upload .avatar {
 		width: 178px;
 		height: 178px;
 		display: block;
