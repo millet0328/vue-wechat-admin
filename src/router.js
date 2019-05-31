@@ -8,6 +8,7 @@ Vue.use(Router)
 import UserLogin from '@/views/User/Login.vue';
 import UserRegister from '@/views/User/Register.vue';
 import UserList from '@/views/User/List.vue';
+import UserInfo from '@/views/User/Info.vue';
 // 订单
 import OrderList from '@/views/Order/List.vue';
 // 管理员
@@ -39,6 +40,7 @@ const routes = [{
 		path: '/index',
 		name: 'Index',
 		component: Index,
+		redirect: '/goods/list',
 		meta: {
 			requiredAuth: true
 		},
@@ -87,7 +89,14 @@ const routes = [{
 				meta: {
 					requiredAuth: true
 				},
-			}
+			}, {
+				path: "/user/info",
+				name: "UserInfo",
+				component: UserInfo,
+				meta: {
+					requiredAuth: true
+				},
+			},
 		]
 	},
 ]

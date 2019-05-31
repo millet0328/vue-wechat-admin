@@ -46,7 +46,7 @@
 		</el-table>
 
 		<!--编辑数据-->
-		<el-dialog title="收货地址" :visible.sync="editModalShow">
+		<el-dialog title="修改信息" :visible.sync="editModalShow">
 			<el-form :model="form" label-position="left">
 				<el-form-item label="昵称" label-width="100px">
 					<el-input v-model="form.nickname" auto-complete="off"></el-input>

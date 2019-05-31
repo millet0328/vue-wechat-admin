@@ -1,0 +1,141 @@
+<template>
+	<div>
+		<div class="clearfix title-box am-margin-bottom-lg">
+			<div class="pull-left">
+				<h3 class="title">账户信息</h3>
+			</div>
+		</div>
+		<el-form :model="form" label-position="left">
+			<el-form-item label="昵称" label-width="100px">
+				<el-input v-model="form.nickname" auto-complete="off"></el-input>
+			</el-form-item>
+			<el-form-item label="性别" label-width="100px">
+				<el-radio-group v-model="form.sex">
+					<el-radio label="男">男</el-radio>
+					<el-radio label="女">女</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item label="手机" label-width="100px">
+				<el-input v-model.number="form.tel" auto-complete="off"></el-input>
+			</el-form-item>
+			<el-form-item label="权限" label-width="100px">
+				<el-select v-model="form.role" placeholder="请选择账户">
+					<el-option v-for="item in roles" :key="item.id" :label="item.role_name" :value="item.id"></el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="头像" label-width="100px">
+				<el-upload class="avatar-uploader" action="/api/upload/avatar/" :headers="headers" :show-file-list="false"
+				 :on-success="editUploadSuccess" :before-upload="beforeUpload">
+					<div class="el-upload">
+						<img v-if="form.avatar" :src="form.avatar" class="avatar">
+						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+					</div>
+				</el-upload>
+			</el-form-item>
+			<el-button type="primary" @click="updateInfo">修 改</el-button>
+		</el-form>
+	</div>
+
+</template>
+
+<script>
+	//引入service模块
+	import { User, Authority } from '@/api/index';
+	import { mapGetters } from 'vuex';
+	export default {
+		data() {
+			return {
+				headers: {
+					Authorization: `Bearer ${sessionStorage.token}`
+				},
+				roles: [],
+			};
+		},
+		computed: {
+			...mapGetters('user', {
+				form: 'userInfo'
+			})
+		},
+		created() {
+			this.loadRole();
+		},
+		methods: {
+			loadRole() {
+				Authority.loadRole()
+					.then(res => {
+						if (res.status) {
+							this.roles = res.data;
+						}
+					});
+			},
+			// 修改账户信息
+			updateInfo() {
+				User.updateUserInfo({ ...this.form }).then((res) => {
+					if (res.status) {
+						this.$message.success(res.msg);
+					}
+				})
+
+			},
+			// 上传图片之前的检查
+			beforeUpload(file) {
+				const isJPG = file.type === 'image/jpeg' || 'image/png';
+				const isLt2M = file.size / 1024 / 1024 < 2;
+
+				if (!isJPG) {
+					this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+				}
+				if (!isLt2M) {
+					this.$message.error('上传头像图片大小不能超过 2MB!');
+				}
+				return isJPG && isLt2M;
+			},
+			// 编辑Modal上传成功
+			editUploadSuccess(res, file) {
+				this.form.avatar = res.src;
+			},
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.title-box {
+		border-bottom: 1px solid #409eff;
+
+		h3 {
+			margin-top: 0;
+		}
+	}
+
+	.el-form {
+		width: 70%;
+		margin: 0 auto;
+	}
+
+	.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+
+		&:hover {
+			border-color: #409EFF;
+		}
+
+		.avatar-uploader-icon {
+			font-size: 28px;
+			color: #8c939d;
+			width: 178px;
+			height: 178px;
+			line-height: 178px;
+			text-align: center;
+		}
+
+		.avatar {
+			width: 178px;
+			height: 178px;
+			display: block;
+		}
+	}
+</style>
