@@ -6,6 +6,9 @@
 			</div>
 		</div>
 		<el-form :model="form" label-position="left">
+			<el-form-item label="账户" label-width="100px">
+				<el-input v-model="form.username" disabled auto-complete="off"></el-input>
+			</el-form-item>
 			<el-form-item label="昵称" label-width="100px">
 				<el-input v-model="form.nickname" auto-complete="off"></el-input>
 			</el-form-item>
@@ -41,7 +44,6 @@
 <script>
 	//引入service模块
 	import { User, Authority } from '@/api/index';
-	import { mapGetters } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -49,15 +51,13 @@
 					Authorization: `Bearer ${sessionStorage.token}`
 				},
 				roles: [],
+				form: {}
 			};
-		},
-		computed: {
-			...mapGetters('user', {
-				form: 'userInfo'
-			})
 		},
 		created() {
 			this.loadRole();
+			// 双向数据绑定，vuex中的state不适合用计算属性
+			this.form = { ...this.$store.state.User.userInfo };
 		},
 		methods: {
 			loadRole() {
@@ -70,7 +70,7 @@
 			},
 			// 修改账户信息
 			updateInfo() {
-				User.updateUserInfo({ ...this.form }).then((res) => {
+				this.$store.dispatch('User/UpdateUserInfo', { ...this.form }).then((res) => {
 					if (res.status) {
 						this.$message.success(res.msg);
 					}

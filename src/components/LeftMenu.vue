@@ -41,10 +41,10 @@
 	export default {
 		computed: {
 			...mapState({
-				isCollapse: state => state.menu.isCollapse,
+				isCollapse: state => state.Menu.isCollapse,
 			}),
 			...mapGetters({
-				role: 'user/role',
+				role: 'User/role',
 			})
 		}
 

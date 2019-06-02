@@ -41,8 +41,23 @@ const GetUserInfo = ({ commit, state }, formData) => {
 			})
 	});
 }
+const UpdateUserInfo = ({ commit, state }, formData) => {
+	return new Promise((resolve, reject) => {
+		User.updateUserInfo(formData)
+			.then((res) => {
+				if (!res.status) {
+					reject(res);
+					return;
+				}
+				// 储存到state
+				commit('SetUserInfo', formData);
+				resolve(res);
+			})
+	});
+}
 export default {
 	Login,
 	Register,
 	GetUserInfo,
+	UpdateUserInfo,
 }

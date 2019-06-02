@@ -11,14 +11,6 @@
 				</el-breadcrumb>
 			</div>
 		</div>
-		<el-form :inline="true" class="">
-			<el-form-item>
-				<el-input placeholder="手机号码"></el-input>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary">查询</el-button>
-			</el-form-item>
-		</el-form>
 		<el-table ref="multipleTable" style="width: 100%" :data="tableData">
 			<el-table-column prop="uid" label="#">
 			</el-table-column>
@@ -39,8 +31,8 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="primary" @click="showEditModal(scope.row)" plain icon="el-icon-edit" size="small"></el-button>
-					<el-button icon="el-icon-delete" type="danger" plain size="small"></el-button>
+					<el-button @click="showEditModal(scope.row)" plain icon="el-icon-edit" size="small" type="primary"></el-button>
+					<el-button @click="showDeleteModal(scope.row.id)" icon="el-icon-delete" plain size="small" type="danger"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -81,8 +73,6 @@
 			</div>
 		</el-dialog>
 		<!--确认删除-->
-
-
 	</div>
 
 </template>
@@ -138,6 +128,18 @@
 				this.editModalShow = true;
 				this.form = row;
 			},
+			showDeleteModal(id) {
+				this.$confirm('此操作将永久删除该账户, 是否继续?', {
+					type: 'warning'
+				}).then(() => {
+					console.log(id);
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+			},
 			// 修改账户信息
 			updateInfo() {
 				User.updateUserInfo({ ...this.form }).then((res) => {
@@ -147,7 +149,6 @@
 						this.loadList();
 					}
 				})
-
 			},
 			// 上传图片之前的检查
 			beforeUpload(file) {

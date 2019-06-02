@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	modules: {
-		user: UserModule,
-		menu: MenuModule
+		User: UserModule,
+		Menu: MenuModule
 	}
 })

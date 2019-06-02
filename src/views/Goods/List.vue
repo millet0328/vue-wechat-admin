@@ -26,20 +26,10 @@
 					<router-link :to="{ name: 'GoodsEdit', params: { id: scope.row.id }}">
 						<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
 					</router-link>
-
-					<el-button @click.native.prevent="deleteRow(scope.row.id)" icon="el-icon-delete" class="deleteBtn" type="danger"
-					 plain size="small"></el-button>
+					<el-button @click="showDeleteModal(scope.row.id)" icon="el-icon-delete" class="deleteBtn" plain size="small" type="danger"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-		<!--确认删除-->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-			<span>确定要删除该商品吗？删除之后无法恢复！！！</span>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-			</span>
-		</el-dialog>
 	</div>
 </template>
 <script>
@@ -47,7 +37,6 @@
 	export default {
 		data() {
 			return {
-				dialogVisible: false,
 				tableData: []
 			};
 		},
@@ -67,10 +56,18 @@
 						}
 					})
 			},
-			deleteRow(id) {
-				this.dialogVisible = true;
-				console.log(id);
-			}
+			showDeleteModal(id) {
+				this.$confirm('确定要删除该商品吗？删除之后无法恢复！！！', {
+					type: 'warning'
+				}).then(() => {
+					console.log(id);
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+			},
 		}
 	};
 </script>

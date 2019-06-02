@@ -31,15 +31,15 @@
 			this.getUserInfo();
 		},
 		computed: {
-			...mapGetters('user', ['nickname', 'avatar'])
+			...mapGetters('User', ['nickname', 'avatar'])
 		},
 		methods: {
 			collapseHandle() {
-				this.$store.commit("menu/toggleMenu");
+				this.$store.commit("Menu/toggleMenu");
 			},
 			getUserInfo() {
 				this.$store
-					.dispatch("user/GetUserInfo", { uid: sessionStorage.uid })
+					.dispatch("User/GetUserInfo", { uid: sessionStorage.uid })
 			}
 		}
 	}

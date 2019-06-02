@@ -76,7 +76,7 @@
 				// 1.表单验证
 				// 2.提取数据
 				this.$store
-					.dispatch('user/Register', { ...this.formData })
+					.dispatch('User/Register', { ...this.formData })
 					.then((res) => {
 						// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
 						sessionStorage.token = res.data.token;
