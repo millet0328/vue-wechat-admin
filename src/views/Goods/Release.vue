@@ -86,7 +86,7 @@
 				<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
 			</el-form-item>
 			<el-form-item label="商品主图">
-				<el-upload :limit="1" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess"
+				<el-upload :limit="1" list-type="picture-card" :headers="headers" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess"
 				 :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError" :on-preview="handleCardPreview"
 				 action="/api/upload/goods/">
 					<i class="el-icon-plus"></i>
@@ -98,9 +98,9 @@
 					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<el-form-item label="商品轮播图">
-				<el-upload :limit="6" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleSliderSuccess"
-				 :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove" :on-error="handleError" :on-preview="handleCardPreview"
-				 action="/api/upload/slider/">
+				<el-upload :limit="6" :fileList="fileList" list-type="picture-card" :headers="headers" :before-upload="handleBeforeUpload"
+				 :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove"
+				 :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/slider/">
 					<i class="el-icon-plus"></i>
 				</el-upload>
 				<el-dialog :visible.sync="dialogVisible">
@@ -158,6 +158,13 @@
 			return {
 				dialogImageUrl: '',
 				dialogVisible: false,
+				headers: {
+					Authorization: `Bearer ${sessionStorage.token}`
+				},
+				fileList: [
+					{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
+					{ name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
+				],
 				form: {
 					cate_1st: "",
 					cate_2nd: "",
@@ -186,7 +193,7 @@
 			};
 		},
 		mounted() {
-			var editor = new E(this.$refs.toolbar,this.$refs.editor);
+			var editor = new E(this.$refs.toolbar, this.$refs.editor);
 			editor.customConfig.zIndex = 100
 			//配置上传图片
 			editor.customConfig.uploadImgServer = '/api/upload/editor/';
