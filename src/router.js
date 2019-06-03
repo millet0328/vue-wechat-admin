@@ -18,6 +18,8 @@ import GoodsCategory from '@/views/Goods/Category.vue';
 import GoodsList from "@/views/Goods/List";
 import GoodsRelease from "@/views/Goods/Release";
 import GoodsEdit from "@/views/Goods/Edit";
+
+import Test from "@/views/Test";
 /**
  * 2. 定义路由
  * 每个路由应该映射一个组件。
@@ -28,6 +30,11 @@ const routes = [{
 		path: '/register',
 		name: 'UserRegister',
 		component: UserRegister,
+	},
+	{
+		path: '/test',
+		name: 'Test',
+		component: Test,
 	},
 	{
 		path: '/login/',

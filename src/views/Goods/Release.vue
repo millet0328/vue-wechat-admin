@@ -86,26 +86,20 @@
 				<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
 			</el-form-item>
 			<el-form-item label="商品主图">
-				<el-upload :limit="1" list-type="picture-card" :headers="headers" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess"
-				 :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError" :on-preview="handleCardPreview"
-				 action="/api/upload/goods/">
+				<el-upload :limit="1" list-type="picture-card" action="/api/upload/goods/" :headers="headers" :before-upload="handleBeforeUpload"
+				 :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError"
+				 :on-preview="handleCardPreview">
 					<i class="el-icon-plus"></i>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
 				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
 					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<el-form-item label="商品轮播图">
-				<el-upload :limit="6" :fileList="fileList" list-type="picture-card" :headers="headers" :before-upload="handleBeforeUpload"
+				<el-upload :limit="6" list-type="picture-card" action="/api/upload/slider/" :headers="headers" :before-upload="handleBeforeUpload"
 				 :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove"
-				 :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/slider/">
+				 :on-error="handleError" :on-preview="handleCardPreview">
 					<i class="el-icon-plus"></i>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
 				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
 					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
@@ -149,6 +143,10 @@
 				<el-button type="success" @click="releaseHandle">提交</el-button>
 			</el-form-item>
 		</el-form>
+		<!-- 图片预览 -->
+		<el-dialog width="30%" :visible.sync="dialogVisible">
+			<img width="100%" :src="dialogImageUrl" alt="">
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -256,19 +254,31 @@
 				}
 			},
 			handleError(err, file, fileList) {
-				this.$message.error('错误：' + err);
+				let { status, message } = err;
+				switch (status) {
+					case 401:
+						this.$message.error(`错误:401,Token失效,请重新登录!`);
+						break;
+					case 400:
+						message = JSON.parse(message);
+						this.$message.error(`错误:400,${message.msg}`);
+						break;
+					default:
+						this.$message.error(`错误:${status},${message}!`);
+						break;
+				}
 			},
 			handleBeforeUpload(file) {
 				let reg = /^image\/(jpe?g|png)$/;
-				const isJPG = reg.test(file.type);
+				const isImg = reg.test(file.type);
 				const isLt2M = file.size / 1024 / 1024 < 2;
-				if (!isJPG) {
+				if (!isImg) {
 					this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
 				}
 				if (!isLt2M) {
 					this.$message.error('上传头像图片大小不能超过 2MB!');
 				}
-				return isJPG && isLt2M;
+				return isImg && isLt2M;
 			},
 			handleMainBeforeRemove(file, fileList) {
 				if (!file.response) {
