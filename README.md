@@ -1,5 +1,14 @@
 # mall-admin
-### 基于vue+vue-router+axios搭建的商城后台管理系统
+### 基于vue + element UI + vue-router + axios搭建的商城后台管理系统
+
+## 安装依赖包
+```
+npm install
+```
+## 基于vue-cli 3.0 开发
+```
+vue ui
+```
 ## Project setup
 ```
 npm install
