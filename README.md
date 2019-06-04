@@ -1,5 +1,6 @@
 # mall-admin
 ### 基于vue + element UI + vue-router + axios搭建的商城后台管理系统
+### 后台API接口由[nodejs-mysql-wechat](https://github.com/luotuo19880328/nodejs-mysql-wechat)提供
 
 ## 安装依赖包
 ```
