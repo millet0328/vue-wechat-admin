@@ -150,6 +150,7 @@
 	</div>
 </template>
 <script>
+	import { Upload, Category, Goods } from '@/api/index';
 	import E from "wangeditor";
 	export default {
 		data() {
@@ -159,10 +160,6 @@
 				headers: {
 					Authorization: `Bearer ${sessionStorage.token}`
 				},
-				fileList: [
-					{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-					{ name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-				],
 				form: {
 					cate_1st: "",
 					cate_2nd: "",
@@ -220,7 +217,6 @@
 					return false;
 				}
 				this.getOptions(id).then((data) => {
-					//回调函数
 					this[cate + '_options'] = data;
 					//如果数组为空，下一级分类设置为空
 					if (data.length == 0) {
@@ -232,20 +228,13 @@
 				});
 			},
 			//获取下一级分类
-			getOptions(id) {
-				return this.axios.get('/api/category/sub/', {
-						params: {
-							pId: id
-						}
-					})
-					.then(function(result) {
-						if (result.status) {
-							//回调函数
-							return Promise.resolve(result.data);
-						} else {
-							this.$message.error(result.msg);
-						}
-					});
+			async getOptions(id) {
+				let { status, data, msg } = await Category.load({ pId: id });
+				if (status) {
+					return Promise.resolve(data);
+				} else {
+					this.$message.error(msg);
+				}
 			},
 			handleMainSuccess(response, file, fileList) {
 				if (response.status) {
@@ -280,30 +269,21 @@
 				}
 				return isImg && isLt2M;
 			},
-			handleMainBeforeRemove(file, fileList) {
-				if (!file.response) {
-					return;
+			async handleMainBeforeRemove(file, fileList) {
+				try {
+					let res1 = await Upload.deleteImage({ src: '.' + file.response.lgImg });
+					let res2 = await Upload.deleteImage({ src: '.' + file.response.mdImg });
+					if (res1.status && res2.status) {
+						//清空图片
+						this.form.img_lg = '';
+						this.form.img_md = '';
+						return true;
+					} else {
+						return false;
+					}
+				} catch (e) {
+					this.$message.error(e);
 				}
-				this.axios
-					.post('/api/upload/delete/', {
-						src: '.' + file.response.lgImg
-					})
-					.then((result) => {
-						if (result.status) {
-							return this.axios.post('/api/upload/delete/', {
-								src: '.' + file.response.mdImg
-							});
-						}
-					}).then((result) => {
-						if (result.status) {
-							//清空图片
-							this.form.img_lg = '';
-							this.form.img_md = '';
-							return true;
-						} else {
-							return false;
-						}
-					});
 			},
 			handleCardPreview(file) {
 				this.dialogImageUrl = file.url;
@@ -321,13 +301,8 @@
 				this.$message.warning(`当前限制选择 6 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
 			handleSliderBeforeRemove(file, fileList) {
-				if (!file.response) {
-					return;
-				}
-				this.axios
-					.post('/api/upload/delete/', {
-						src: '.' + file.response.src
-					})
+				Upload
+					.deleteImage({ src: '.' + file.response.src })
 					.then((result) => {
 						if (result.status) {
 							this.form.slider = this.convertFileList(fileList);
@@ -346,18 +321,11 @@
 				return res.toString();
 			},
 			//发布商品
-			releaseHandle() {
-				this.axios
-					.post("/api/goods/release/", this.form)
-					.then((result) => {
-						if (result.status) {
-							this.$router.go(0);
-							this.$message({
-								message: '发布商品成功！',
-								type: 'success'
-							});
-						}
-					});
+			async releaseHandle() {
+				let { status } = await Goods.release(this.form);
+				if (status) {
+					this.$message.success('发布商品成功！');
+				}
 			}
 		}
 	};

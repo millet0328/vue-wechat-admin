@@ -34,9 +34,7 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<router-link :to="{ name: 'GoodsEdit', params: { id: scope.row.id }}">
-						<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
-					</router-link>
+					<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
