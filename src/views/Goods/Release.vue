@@ -63,7 +63,7 @@
 			</el-form-item>
 			<el-form-item label="折扣">
 				<el-col :span="3">
-					<el-input v-model="form.discount" disabled>
+					<el-input readonly v-model="discount">
 						<template slot="append">折</template>
 					</el-input>
 				</el-col>
@@ -169,7 +169,7 @@
 					price: "",
 					marketPrice: "",
 					cost: "",
-					discount: "0",
+					discount: "",
 					inventory: "",
 					articleNo: "",
 					img_lg: "",
@@ -186,6 +186,23 @@
 				cate_2nd_options: [],
 				cate_3rd_options: [],
 			};
+		},
+		computed: {
+			discount() {
+				let discount = (this.form.price / this.form.marketPrice * 10).toFixed(2);
+				this.form.discount = discount;
+				switch (discount) {
+					case 'NaN':
+						return '';
+						break;
+					case 'Infinity':
+						return '';
+						break;
+					default:
+						return discount;
+						break;
+				}
+			}
 		},
 		mounted() {
 			var editor = new E(this.$refs.toolbar, this.$refs.editor);

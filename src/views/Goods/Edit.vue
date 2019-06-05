@@ -2,13 +2,13 @@
 	<div>
 		<div class="clearfix title-box am-margin-bottom-lg">
 			<div class="pull-left">
-				<h3 class="title">发布新商品</h3>
+				<h3 class="title">编辑商品</h3>
 			</div>
 			<div class="pull-right">
 				<el-breadcrumb separator-class="el-icon-arrow-right">
 					<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-					<el-breadcrumb-item>商品管理</el-breadcrumb-item>
-					<el-breadcrumb-item>发布商品</el-breadcrumb-item>
+					<el-breadcrumb-item :to="{ path: '/goods/list' }">商品管理</el-breadcrumb-item>
+					<el-breadcrumb-item>编辑商品</el-breadcrumb-item>
 				</el-breadcrumb>
 			</div>
 		</div>
@@ -63,7 +63,7 @@
 			</el-form-item>
 			<el-form-item label="折扣">
 				<el-col :span="3">
-					<el-input v-model="form.discount" disabled>
+					<el-input readonly v-model="discount">
 						<template slot="append">折</template>
 					</el-input>
 				</el-col>
@@ -86,22 +86,22 @@
 				<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
 			</el-form-item>
 			<el-form-item label="商品主图">
-				<el-upload :limit="1" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/goods/">
+				<el-upload :limit="1" list-type="picture-card" action="/api/upload/goods/" :headers="headers" :before-upload="handleBeforeUpload"
+				 :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError"
+				 :on-preview="handleCardPreview">
 					<i class="el-icon-plus"></i>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸 800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<el-form-item label="商品轮播图">
-				<el-upload :limit="6" list-type="picture-card" :before-upload="handleBeforeUpload" :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove" :on-error="handleError" :on-preview="handleCardPreview" action="/api/upload/slider/">
+				<el-upload :limit="6" list-type="picture-card" action="/api/upload/slider/" :headers="headers" :before-upload="handleBeforeUpload"
+				 :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove"
+				 :on-error="handleError" :on-preview="handleCardPreview">
 					<i class="el-icon-plus"></i>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸 800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
 			</el-form-item>
 			<div class="section-title">商品详情描述</div>
 			<el-form-item label="商品品牌">
@@ -110,8 +110,8 @@
 				</el-col>
 			</el-form-item>
 			<el-form-item label="商品描述">
-				<div id="toolbar" class="w-e-toolbar"></div>
-				<div id="editorZone" ref="editor" class="w-e-text-container"></div>
+				<div ref="toolbar" class="w-e-toolbar"></div>
+				<div ref="editor" class="w-e-text-container"></div>
 			</el-form-item>
 			<div class="section-title">商品物流信息</div>
 			<el-form-item label="所在地">
@@ -143,15 +143,23 @@
 				<el-button type="success" @click="releaseHandle">提交</el-button>
 			</el-form-item>
 		</el-form>
+		<!-- 图片预览 -->
+		<el-dialog width="30%" :visible.sync="dialogVisible">
+			<img width="100%" :src="dialogImageUrl" alt="">
+		</el-dialog>
 	</div>
 </template>
 <script>
+	import { Upload, Category, Goods } from '@/api/index';
 	import E from "wangeditor";
 	export default {
 		data() {
 			return {
 				dialogImageUrl: '',
 				dialogVisible: false,
+				headers: {
+					Authorization: `Bearer ${sessionStorage.token}`
+				},
 				form: {
 					cate_1st: "",
 					cate_2nd: "",
@@ -161,7 +169,7 @@
 					price: "",
 					marketPrice: "",
 					cost: "",
-					discount: "0",
+					discount: "",
 					inventory: "",
 					articleNo: "",
 					img_lg: "",
@@ -179,14 +187,34 @@
 				cate_3rd_options: [],
 			};
 		},
+		computed: {
+			discount() {
+				let discount = (this.form.price / this.form.marketPrice * 10).toFixed(2);
+				this.form.discount = discount;
+				switch (discount) {
+					case 'NaN':
+						return '';
+						break;
+					case 'Infinity':
+						return '';
+						break;
+					default:
+						return discount;
+						break;
+				}
+			}
+		},
 		created() {
+			// 获取参数对应的数据
+
+			// 加载一级分类
 			this.cateChangeHandle(1, 'cate_1st');
 		},
 		mounted() {
-			var editor = new E('#toolbar', '#editorZone');
+			var editor = new E(this.$refs.toolbar, this.$refs.editor);
 			editor.customConfig.zIndex = 100
 			//配置上传图片
-			editor.customConfig.uploadImgServer = '/api/upload/common/';
+			editor.customConfig.uploadImgServer = '/api/upload/editor/';
 			editor.customConfig.uploadFileName = 'file';
 			//同步HTML代码至data
 			editor.customConfig.onchange = html => {
@@ -195,24 +223,26 @@
 			editor.create();
 		},
 		watch: {
-			'form.cate_1st' (newValue, oldValue) {
+			'form.cate_1st'(newValue, oldValue) {
 				this.cateChangeHandle(newValue, 'cate_2nd');
 			},
-			'form.cate_2nd' (newValue, oldValue) {
+			'form.cate_2nd'(newValue, oldValue) {
 				this.cateChangeHandle(newValue, 'cate_3rd');
 			},
 		},
 		methods: {
+			getDetail() {
+
+			},
 			//分类change事件
 			cateChangeHandle(id, cate) {
-				if(!id) {
+				if (!id) {
 					return false;
 				}
 				this.getOptions(id).then((data) => {
-					//回调函数
 					this[cate + '_options'] = data;
 					//如果数组为空，下一级分类设置为空
-					if(data.length == 0) {
+					if (data.length == 0) {
 						this.form[cate] = '';
 						return false;
 					}
@@ -221,66 +251,62 @@
 				});
 			},
 			//获取下一级分类
-			getOptions(id) {
-				return this.axios.get('/api/category/sub/', {
-						params: {
-							pId: id
-						}
-					})
-					.then(function(result) {
-						if(result.data.status) {
-							//回调函数
-							return Promise.resolve(result.data.data);
-						} else {
-							this.$message.error(result.data.msg);
-						}
-					});
+			async getOptions(id) {
+				let { status, data, msg } = await Category.load({ pId: id });
+				if (status) {
+					return Promise.resolve(data);
+				} else {
+					this.$message.error(msg);
+				}
 			},
 			handleMainSuccess(response, file, fileList) {
-				if(response.status) {
+				if (response.status) {
 					this.form.img_lg = response.lgImg;
 					this.form.img_md = response.mdImg;
 				}
 			},
 			handleError(err, file, fileList) {
-				this.$message.error('错误：' + err);
+				let { status, message } = err;
+				switch (status) {
+					case 401:
+						this.$message.error(`错误:401,Token失效,请重新登录!`);
+						break;
+					case 400:
+						message = JSON.parse(message);
+						this.$message.error(`错误:400,${message.msg}`);
+						break;
+					default:
+						this.$message.error(`错误:${status},${message}!`);
+						break;
+				}
 			},
 			handleBeforeUpload(file) {
 				let reg = /^image\/(jpe?g|png)$/;
-				const isJPG = reg.test(file.type);
+				const isImg = reg.test(file.type);
 				const isLt2M = file.size / 1024 / 1024 < 2;
-				if(!isJPG) {
+				if (!isImg) {
 					this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
 				}
-				if(!isLt2M) {
+				if (!isLt2M) {
 					this.$message.error('上传头像图片大小不能超过 2MB!');
 				}
-				return isJPG && isLt2M;
+				return isImg && isLt2M;
 			},
-			handleMainBeforeRemove(file, fileList) {
-				if(!file.response) {
-					return;
+			async handleMainBeforeRemove(file, fileList) {
+				try {
+					let res1 = await Upload.deleteImage({ src: '.' + file.response.lgImg });
+					let res2 = await Upload.deleteImage({ src: '.' + file.response.mdImg });
+					if (res1.status && res2.status) {
+						//清空图片
+						this.form.img_lg = '';
+						this.form.img_md = '';
+						return true;
+					} else {
+						return false;
+					}
+				} catch (e) {
+					this.$message.error(e);
 				}
-				this.axios
-					.post('/api/upload/delete/', {
-						src: '.' + file.response.lgImg
-					})
-					.then((result) => {
-						if(result.status) {
-							return this.axios.post('/api/upload/delete/', {
-								src: '.' + file.response.mdImg
-							});
-						}
-					}).then((result) => {
-						if(result.status) {
-							//清空图片
-							this.form.img_lg = '';
-							this.form.img_md = '';
-							return true;
-						} else {
-							return false;
-						}
-					});
 			},
 			handleCardPreview(file) {
 				this.dialogImageUrl = file.url;
@@ -290,29 +316,21 @@
 				this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
 			handleSliderSuccess(response, file, fileList) {
-				if(response.status) {
+				if (response.status) {
 					this.form.slider = this.convertFileList(fileList);
 				}
 			},
 			handleSliderExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 6 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
-			handleSliderBeforeRemove(file, fileList) {
-				if(!file.response) {
-					return;
+			async handleSliderBeforeRemove(file, fileList) {
+				let { status } = await Upload.deleteImage({ src: '.' + file.response.src });
+				if (status) {
+					this.form.slider = this.convertFileList(fileList);
+					return true;
+				} else {
+					return false;
 				}
-				this.axios
-					.post('/api/upload/delete/', {
-						src: '.' + file.response.src
-					})
-					.then((result) => {
-						if(result.status) {
-							this.form.slider = this.convertFileList(fileList);
-							return true;
-						} else {
-							return false;
-						}
-					});
 			},
 			//转换数据格式
 			convertFileList(fileList) {
@@ -323,18 +341,11 @@
 				return res.toString();
 			},
 			//发布商品
-			releaseHandle() {
-				this.axios
-					.post("/api/goods/release/", this.form)
-					.then((result) => {
-						if(result.data.status) {
-							this.$router.go(0);
-							this.$message({
-								message: '发布商品成功！',
-								type: 'success'
-							});
-						}
-					});
+			async releaseHandle() {
+				let { status } = await Goods.release(this.form);
+				if (status) {
+					this.$message.success('发布商品成功！');
+				}
 			}
 		}
 	};
@@ -343,31 +354,31 @@
 	.title-box {
 		border-bottom: 1px solid #409eff;
 	}
-	
+
 	.title-box h3 {
 		margin-top: 0;
 	}
-	
+
 	.tip {
 		font-size: 12px;
 		color: #999;
 	}
-	
+
 	.section-title {
 		background-color: #f5f5f5;
 		padding: 10px;
 		margin-bottom: 10px;
 	}
-	
+
 	.el-upload img {
 		max-width: 100%;
 	}
-	
+
 	.w-e-toolbar {
 		border: 1px solid #ccc;
 		border-bottom: 0;
 	}
-	
+
 	.w-e-text-container {
 		border: 1px solid #ccc;
 		min-height: 1500px;
