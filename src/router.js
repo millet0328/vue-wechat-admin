@@ -27,109 +27,110 @@ import Test from "@/views/Test";
  * 或者，只是一个组件配置对象。
  */
 const routes = [{
-		path: '/register',
-		name: 'UserRegister',
-		component: UserRegister,
-	},
-	{
-		path: '/test',
-		name: 'Test',
-		component: Test,
-	},
-	{
-		path: '/login/',
-		name: 'UserLogin',
-		component: UserLogin,
-		props: (route) => route.query,
-		alias: "/",
-	},
-	{
-		path: '/index',
-		name: 'Index',
-		component: Index,
-		redirect: '/goods/list',
-		meta: {
-			requiredAuth: true
-		},
-		children: [{
-				path: '/goods/category/',
-				name: 'GoodsCategory',
-				component: GoodsCategory,
-				meta: {
-					requiredAuth: true
-				},
-			},
-			{
-				path: "/goods/list",
-				name: "GoodsList",
-				component: GoodsList,
-				meta: {
-					requiredAuth: true
-				},
-			},
-			{
-				path: "/goods/release",
-				name: "GoodsRelease",
-				component: GoodsRelease,
-				meta: {
-					requiredAuth: true
-				},
-			},
-			{
-				path: "/goods/edit/:id",
-				name: "GoodsEdit",
-				component: GoodsEdit,
-				meta: {
-					requiredAuth: true
-				},
-			}, {
-				path: "/user/list",
-				name: "UserList",
-				component: UserList,
-				meta: {
-					requiredAuth: true
-				},
-			}, {
-				path: "/order/list",
-				name: "OrderList",
-				component: OrderList,
-				meta: {
-					requiredAuth: true
-				},
-			}, {
-				path: "/user/info",
-				name: "UserInfo",
-				component: UserInfo,
-				meta: {
-					requiredAuth: true
-				},
-			},
-		]
-	},
+        path: '/register',
+        name: 'UserRegister',
+        component: UserRegister,
+    },
+    {
+        path: '/test',
+        name: 'Test',
+        component: Test,
+    },
+    {
+        path: '/login/',
+        name: 'UserLogin',
+        component: UserLogin,
+        props: (route) => route.query,
+        alias: "/",
+    },
+    {
+        path: '/index',
+        name: 'Index',
+        component: Index,
+        redirect: '/goods/list',
+        meta: {
+            requiredAuth: true
+        },
+        children: [{
+                path: '/goods/category/',
+                name: 'GoodsCategory',
+                component: GoodsCategory,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+            {
+                path: "/goods/list",
+                name: "GoodsList",
+                component: GoodsList,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+            {
+                path: "/goods/release",
+                name: "GoodsRelease",
+                component: GoodsRelease,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+            {
+                path: "/goods/edit/:id",
+                name: "GoodsEdit",
+                component: GoodsEdit,
+                props: true,
+                meta: {
+                    requiredAuth: true
+                },
+            }, {
+                path: "/user/list",
+                name: "UserList",
+                component: UserList,
+                meta: {
+                    requiredAuth: true
+                },
+            }, {
+                path: "/order/list",
+                name: "OrderList",
+                component: OrderList,
+                meta: {
+                    requiredAuth: true
+                },
+            }, {
+                path: "/user/info",
+                name: "UserInfo",
+                component: UserInfo,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+        ]
+    },
 ]
 
 // 3. 创建 router 实例，然后传 `routes` 配置。
 const router = new Router({
-	routes // (缩写) 相当于 routes: routes
+    routes // (缩写) 相当于 routes: routes
 })
 // 4.全局路由守卫
 router.beforeEach((to, from, next) => {
-	if (to.matched.some(record => record.meta.requiredAuth)) {
-		// 无token,未登录
-		if (!sessionStorage.token) {
-			next({
-				path: '/login',
-				query: {
-					redirect: to.fullPath
-				}
-			});
-			return;
-		}
-		// 已登录
-		next();
-	} else {
-		next();
-	}
+    if (to.matched.some(record => record.meta.requiredAuth)) {
+        // 无token,未登录
+        if (!sessionStorage.token) {
+            next({
+                path: '/login',
+                query: {
+                    redirect: to.fullPath
+                }
+            });
+            return;
+        }
+        // 已登录
+        next();
+    } else {
+        next();
+    }
 });
 
 export default router

@@ -210,6 +210,10 @@
 			//配置上传图片
 			editor.customConfig.uploadImgServer = '/api/upload/editor/';
 			editor.customConfig.uploadFileName = 'file';
+			// 配置header信息
+			editor.customConfig.uploadImgHeaders = {
+				Authorization: `Bearer ${sessionStorage.token}`
+			}
 			//同步HTML代码至data
 			editor.customConfig.onchange = html => {
 				this.form.detail = html;
