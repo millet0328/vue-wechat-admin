@@ -205,7 +205,7 @@
 			}
 		},
 		mounted() {
-			var editor = new E(this.$refs.toolbar, this.$refs.editor);
+			const editor = new E(this.$refs.toolbar, this.$refs.editor);
 			editor.customConfig.zIndex = 100
 			//配置上传图片
 			editor.customConfig.uploadImgServer = '/api/upload/editor/';
@@ -213,7 +213,7 @@
 			// 配置header信息
 			editor.customConfig.uploadImgHeaders = {
 				Authorization: `Bearer ${sessionStorage.token}`
-			}
+			};
 			//同步HTML代码至data
 			editor.customConfig.onchange = html => {
 				this.form.detail = html;
@@ -321,17 +321,19 @@
 			handleSliderExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 6 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
-			handleSliderBeforeRemove(file, fileList) {
-				Upload
-					.deleteImage({ src: '.' + file.response.src })
-					.then((result) => {
-						if (result.status) {
-							this.form.slider = this.convertFileList(fileList);
-							return true;
-						} else {
-							return false;
-						}
-					});
+			async handleSliderBeforeRemove(file, fileList) {
+				let {status} = await Upload.deleteImage({
+					src: "." + file.response.src
+				});
+				if (status) {
+					let i = fileList.findIndex(item => item.url == file.response.src);
+					let copy = [...fileList];
+					copy.splice(i, 1);
+					this.form.slider = this.convertFileList(copy);
+					return true;
+				} else {
+					return false;
+				}
 			},
 			//转换数据格式
 			convertFileList(fileList) {
