@@ -7,7 +7,7 @@
 			<div class="pull-right">
 				<el-breadcrumb separator-class="el-icon-arrow-right">
 					<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-					<el-breadcrumb-item :to="{ path: '/goods/list' }">商品管理</el-breadcrumb-item>
+					<el-breadcrumb-item>商品管理</el-breadcrumb-item>
 					<el-breadcrumb-item>发布商品</el-breadcrumb-item>
 				</el-breadcrumb>
 			</div>
@@ -354,14 +354,6 @@
 	};
 </script>
 <style scoped>
-	.title-box {
-		border-bottom: 1px solid #409eff;
-	}
-
-	.title-box h3 {
-		margin-top: 0;
-	}
-
 	.tip {
 		font-size: 12px;
 		color: #999;

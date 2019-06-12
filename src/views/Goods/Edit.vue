@@ -401,14 +401,6 @@
     };
 </script>
 <style scoped>
-    .title-box {
-        border-bottom: 1px solid #409eff;
-    }
-
-    .title-box h3 {
-        margin-top: 0;
-    }
-
     .tip {
         font-size: 12px;
         color: #999;

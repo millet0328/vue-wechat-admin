@@ -18,23 +18,22 @@ import GoodsCategory from '@/views/Goods/Category.vue';
 import GoodsList from "@/views/Goods/List";
 import GoodsRelease from "@/views/Goods/Release";
 import GoodsEdit from "@/views/Goods/Edit";
+//权限
+import AuthRole from "@/views/Auth/Role";
+import AuthMenu from "@/views/Auth/Menu";
+import RoleConfig from "@/views/Auth/Role-Config";
 
-import Test from "@/views/Test";
 /**
  * 2. 定义路由
  * 每个路由应该映射一个组件。
  * 其中"component" 可以是通过 Vue.extend() 创建的组件构造器，
  * 或者，只是一个组件配置对象。
  */
-const routes = [{
+const routes = [
+    {
         path: '/register',
         name: 'UserRegister',
         component: UserRegister,
-    },
-    {
-        path: '/test',
-        name: 'Test',
-        component: Test,
     },
     {
         path: '/login/',
@@ -52,13 +51,13 @@ const routes = [{
             requiredAuth: true
         },
         children: [{
-                path: '/goods/category/',
-                name: 'GoodsCategory',
-                component: GoodsCategory,
-                meta: {
-                    requiredAuth: true
-                },
+            path: '/goods/category/',
+            name: 'GoodsCategory',
+            component: GoodsCategory,
+            meta: {
+                requiredAuth: true
             },
+        },
             {
                 path: "/goods/list",
                 name: "GoodsList",
@@ -105,6 +104,29 @@ const routes = [{
                     requiredAuth: true
                 },
             },
+            {
+                path: "/auth/role",
+                name: "AuthRole",
+                component: AuthRole,
+                meta: {
+                    requiredAuth: true
+                },
+                children: [{
+                    path: "config",
+                    name: "RoleConfig",
+                    component: RoleConfig,
+                    meta: {
+                        requiredAuth: true
+                    },
+                }]
+            }, {
+                path: "/auth/menu",
+                name: "AuthMenu",
+                component: AuthMenu,
+                meta: {
+                    requiredAuth: true
+                },
+            }
         ]
     },
 ]

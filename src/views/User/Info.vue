@@ -43,7 +43,7 @@
 
 <script>
 	//引入service模块
-	import { User, Authority } from '@/api/index';
+	import { User, Role } from '@/api/index';
 	export default {
 		data() {
 			return {
@@ -61,7 +61,7 @@
 		},
 		methods: {
 			loadRole() {
-				Authority.loadRole()
+				Role.load()
 					.then(res => {
 						if (res.status) {
 							this.roles = res.data;
@@ -99,14 +99,6 @@
 </script>
 
 <style lang="scss" scoped>
-	.title-box {
-		border-bottom: 1px solid #409eff;
-
-		h3 {
-			margin-top: 0;
-		}
-	}
-
 	.el-form {
 		width: 70%;
 		margin: 0 auto;
