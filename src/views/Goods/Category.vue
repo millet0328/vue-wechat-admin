@@ -1,29 +1,18 @@
 <template>
     <div>
-        <div class="clearfix title-box am-margin-bottom-lg">
-            <div class="pull-left">
-                <h3 class="title">商品分类</h3>
-            </div>
-            <div class="pull-right">
-                <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-                    <el-breadcrumb-item>商品分类</el-breadcrumb-item>
-                </el-breadcrumb>
-            </div>
-        </div>
+        <Title text="商品分类"></Title>
         <!-- 树形组件 -->
         <el-tree ref="tree" :default-expanded-keys="[1]" lazy node-key="id" :load="loadNode" :props="defaultProps">
             <div class="node-box" slot-scope="{ node, data }">
                 <span class="node-name">{{ node.label }}</span>
                 <span class="node-action">
-					<el-button type="text" size="mini" @click.stop="openEditModal(node,data)">
+					<el-button type="text" size="mini" :disabled="data.id==1" @click.stop="openEditModal(node,data)">
 						编辑
 					</el-button>
 					<el-button type="text" size="mini" @click.stop="openAddModal(node,data)">
 						添加
 					</el-button>
-					<el-button type="text" size="mini" @click.stop="openDeleteModal(node,data)">
+					<el-button type="text" size="mini" :disabled="data.id==1" @click.stop="openDeleteModal(node,data)">
 						删除
 					</el-button>
 				</span>
@@ -78,8 +67,11 @@
 
 <script>
     import {Category} from '@/api/index';
-
+    import Title from '@/components/Title.vue';
     export default {
+        components: {
+            Title
+        },
         data() {
             return {
                 defaultProps: {

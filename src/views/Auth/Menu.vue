@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div class="clearfix title-box am-margin-bottom-lg">
-            <div class="pull-left">
-                <h3 class="title">菜单权限</h3>
-            </div>
-            <div class="pull-right">
-                <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item>菜单权限</el-breadcrumb-item>
-                </el-breadcrumb>
-            </div>
-        </div>
+        <Title text="菜单权限"></Title>
         <!-- 树形组件 -->
         <el-tree ref="tree" :default-expanded-keys="[1]" lazy node-key="id" :load="loadNode" :props="defaultProps">
             <div class="node-box" slot-scope="{ node, data }">
@@ -74,9 +64,12 @@
 
 <script>
     import {Menu} from "@/api/index";
-
+    import Title from '@/components/Title.vue';
     export default {
         name: "Menu",
+        components: {
+            Title
+        },
         data() {
             return {
                 defaultProps: {

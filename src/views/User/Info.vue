@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<div class="clearfix title-box am-margin-bottom-lg">
-			<div class="pull-left">
-				<h3 class="title">账户信息</h3>
-			</div>
-		</div>
+		<Title text="账户信息"></Title>
 		<el-form :model="form" label-position="left">
 			<el-form-item label="账户" label-width="100px">
 				<el-input v-model="form.username" disabled auto-complete="off"></el-input>
@@ -44,7 +40,11 @@
 <script>
 	//引入service模块
 	import { User, Role } from '@/api/index';
+	import Title from '@/components/Title.vue';
 	export default {
+		components: {
+			Title
+		},
 		data() {
 			return {
 				headers: {

@@ -14,12 +14,4 @@
     // css公共类
     @import url("./assets/css/reset.css");
     @import url('./assets/lib/font-awesome-4.7.0/css/font-awesome.min.css');
-
-    .title-box {
-        border-bottom: 1px solid #409eff;
-
-        h3 {
-            margin-top: 0;
-        }
-    }
 </style>

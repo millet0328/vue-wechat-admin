@@ -112,9 +112,10 @@ const routes = [
                     requiredAuth: true
                 },
                 children: [{
-                    path: "config",
+                    path: "config/:id",
                     name: "RoleConfig",
                     component: RoleConfig,
+                    props: true,
                     meta: {
                         requiredAuth: true
                     },

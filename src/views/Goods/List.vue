@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<Title text="商品列表"></Title>
 		<el-table :data="tableData" style="width:100%">
 			<el-table-column fixed label="商品名称" width="550">
 				<template slot-scope="scope">
@@ -23,10 +24,10 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<router-link :to="{ name: 'GoodsEdit', params: { id: scope.row.id }}">
+					<router-link class="am-margin-right-sm" :to="{ name: 'GoodsEdit', params: { id: scope.row.id }}">
 						<el-button type="primary" plain icon="el-icon-edit" size="small"></el-button>
 					</router-link>
-					<el-button @click="showDeleteModal(scope.row.id)" icon="el-icon-delete" class="deleteBtn" plain size="small" type="danger"></el-button>
+					<el-button @click="showDeleteModal(scope.row.id)" icon="el-icon-delete" plain type="danger"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -34,7 +35,11 @@
 </template>
 <script>
 	import { Goods } from '@/api/index';
+	import Title from '@/components/Title.vue';
 	export default {
+		components: {
+			Title
+		},
 		data() {
 			return {
 				tableData: []
@@ -87,7 +92,4 @@
 		}
 	}
 
-	.deleteBtn {
-		margin-left: 10px;
-	}
 </style>

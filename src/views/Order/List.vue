@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<Title text="订单列表"></Title>
 		<!-- table -->
 		<el-table :data="tableData" style="width:100%">
 			<el-table-column prop="id" label="#" width="50">
@@ -42,7 +43,11 @@
 </template>
 <script>
 	import { Order } from '@/api/index';
+	import Title from '@/components/Title.vue';
 	export default {
+		components: {
+			Title
+		},
 		data() {
 			return {
 				tableData: []

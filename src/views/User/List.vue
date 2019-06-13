@@ -1,16 +1,6 @@
 <template>
     <div>
-        <div class="clearfix title-box am-margin-bottom-lg">
-            <div class="pull-left">
-                <h3 class="title">客户列表</h3>
-            </div>
-            <div class="pull-right">
-                <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-                </el-breadcrumb>
-            </div>
-        </div>
+        <Title text="客户列表"></Title>
         <el-table ref="multipleTable" style="width: 100%" :data="tableData">
             <el-table-column prop="uid" label="#">
             </el-table-column>
@@ -84,9 +74,12 @@
 <script>
     //引入service模块
     import {User, Role} from '@/api/index'
-
+    import Title from '@/components/Title.vue';
     export default {
-        name: "list",
+        name: "List",
+        components: {
+            Title
+        },
         data() {
             return {
                 tableData: [],

@@ -1,17 +1,6 @@
 <template>
 	<div>
-		<div class="clearfix title-box am-margin-bottom-lg">
-			<div class="pull-left">
-				<h3 class="title">发布新商品</h3>
-			</div>
-			<div class="pull-right">
-				<el-breadcrumb separator-class="el-icon-arrow-right">
-					<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-					<el-breadcrumb-item>商品管理</el-breadcrumb-item>
-					<el-breadcrumb-item>发布商品</el-breadcrumb-item>
-				</el-breadcrumb>
-			</div>
-		</div>
+		<Title text="发布新商品"></Title>
 		<el-form ref="form" :model="form" label-position="left" label-width="120px">
 			<el-form-item label="商品分类">
 				<el-select v-model="form.cate_1st" placeholder="请选择分类">
@@ -152,7 +141,11 @@
 <script>
 	import { Upload, Category, Goods } from '@/api/index';
 	import E from "wangeditor";
+	import Title from '@/components/Title.vue';
 	export default {
+		components: {
+			Title
+		},
 		data() {
 			return {
 				dialogImageUrl: '',
