@@ -2,7 +2,7 @@
 	<div>
 		<Title text="商品列表"></Title>
 		<el-table :data="tableData" style="width:100%">
-			<el-table-column fixed label="商品名称" width="550">
+			<el-table-column fixed label="商品名称" width="600">
 				<template slot-scope="scope">
 					<div class="goods">
 						<div class="img">
@@ -16,11 +16,11 @@
 					</div>
 				</template>
 			</el-table-column>
-			<el-table-column prop="price" label="价格" width="120">
+			<el-table-column prop="price" label="价格">
 			</el-table-column>
-			<el-table-column prop="inventory" label="库存" width="120">
+			<el-table-column prop="inventory" label="库存">
 			</el-table-column>
-			<el-table-column prop="create_time" label="发布时间" width="180">
+			<el-table-column prop="create_time" label="发布时间">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">

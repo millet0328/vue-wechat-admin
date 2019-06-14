@@ -68,6 +68,7 @@
 <script>
     import {Category} from '@/api/index';
     import Title from '@/components/Title.vue';
+
     export default {
         components: {
             Title
@@ -157,19 +158,14 @@
                     type: 'warning',
                     title: "",
                     message: '此操作将永久删除该分类, 是否继续?'
-                })
-                    .then(() => {
-                        Category.remove({id: data.id}).then(res => {
-                            if (res.status) {
-                                node.remove();
-                                this.$message({
-                                    type: 'success',
-                                    message: '删除成功!'
-                                });
-                            }
-                        })
-
+                }).then(() => {
+                    Category.remove({id: data.id}).then(res => {
+                        if (res.status) {
+                            node.remove();
+                            this.$message.success('删除成功!');
+                        }
                     })
+                })
             },
             // 上传图片之前的检查
             beforeUpload(file) {

@@ -18,17 +18,22 @@
                         <el-table-column
                                 label="角色">
                             <template slot-scope="scope">
-                                <el-tag>{{scope.row.role_name}}</el-tag>
+                                <el-tag :type="scope.row.id===1?'danger':''">{{scope.row.name}}</el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                                label="操作">
+                        <el-table-column width="180"
+                                         label="操作">
                             <template slot-scope="scope">
-                                <router-link class="am-margin-right-sm" :to="{ name: 'RoleConfig', params: { id: scope.row.id }}">
-                                    <el-button type="primary" plain icon="el-icon-edit"></el-button>
-                                </router-link>
-                                <el-button type="danger" plain @click="removeRoleHandle(scope.row.id)"
+                                <el-button :disabled="scope.row.id===1" type="primary" plain
+                                           @click="openEditModal(scope.row)"
+                                           icon="el-icon-edit"></el-button>
+                                <el-button :disabled="scope.row.id===1" type="danger" plain
+                                           @click="openDeleteModal(scope.row.id)"
                                            icon="el-icon-delete"></el-button>
+                                <router-link class="am-margin-left-sm"
+                                             :to="{ name: 'RoleConfig', params: { id: scope.row.id }}">
+                                    <el-button type="primary" plain icon="el-icon-setting"></el-button>
+                                </router-link>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -48,6 +53,18 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @click="AddModalVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addRoleHandle">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑Modal -->
+        <el-dialog title="编辑角色" :visible.sync="EditModalVisible">
+            <el-form label-width="80px" :label-position="'left'">
+                <el-form-item label="名称">
+                    <el-input v-model="editForm.name"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="EditModalVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateRoleHandle">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -70,6 +87,11 @@
                 addForm: {
                     name: "",
                 },
+                EditModalVisible: false,
+                editForm: {
+                    id: "",
+                    name: "",
+                },
             }
         },
         created() {
@@ -90,13 +112,34 @@
                     this.AddModalVisible = false;
                 }
             },
-            //删除角色
-            async removeRoleHandle(id) {
-                let {status} = await Role.remove({id});
+            //打开编辑Modal
+            openEditModal(data) {
+                this.EditModalVisible = true;
+                this.editForm = {...data};
+            },
+            //编辑角色
+            async updateRoleHandle() {
+                let {status} = await Role.update({...this.editForm});
                 if (status) {
                     this.loadRole();
+                    this.EditModalVisible = false;
                 }
-            }
+            },
+            // 确认删除
+            openDeleteModal(id) {
+                this.$msgbox({
+                    type: 'warning',
+                    title: "",
+                    message: '此操作将永久删除该角色及其关联账户, 是否继续？',
+                    showCancelButton: true,
+                }).then(async () => {
+                    let {status} = await Role.remove({id});
+                    if (status) {
+                        this.loadRole();
+                        this.$message.success('删除成功!');
+                    }
+                })
+            },
         }
     }
 </script>

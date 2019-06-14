@@ -1,8 +1,12 @@
 <template>
     <div>
         <Title text="菜单权限"></Title>
+        <el-alert title="Tips" type="warning" description="设置后台管理系统的左侧菜单，目前至多支持两层菜单，三层以上菜单将不会显示。" show-icon
+                  :closable="false">
+        </el-alert>
         <!-- 树形组件 -->
-        <el-tree ref="tree" :default-expanded-keys="[1]" lazy node-key="id" :load="loadNode" :props="defaultProps">
+        <el-tree class="am-margin-top-lg" ref="tree" :default-expanded-keys="[1]" lazy node-key="id" :load="loadNode"
+                 :props="defaultProps">
             <div class="node-box" slot-scope="{ node, data }">
                 <div class="node-name">
                     {{ node.label }}
@@ -65,6 +69,7 @@
 <script>
     import {Menu} from "@/api/index";
     import Title from '@/components/Title.vue';
+
     export default {
         name: "Menu",
         components: {

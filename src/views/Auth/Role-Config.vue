@@ -1,47 +1,86 @@
 <template>
     <div>
-        <el-card class="">
-            <div slot="header" class="">
-                <span>角色菜单</span>
+        <el-card class="am-margin-bottom-sm" v-for="(item,index) in menu">
+            <div slot="header" class="menu-header">
+                <div class="menu-title am-text-sm">
+                    <i class="el-icon-collection-tag"></i>
+                    {{item.name}}
+                </div>
+                <el-switch @change="parentHandle(item.checked,item)" v-model="item.checked"></el-switch>
             </div>
-            <el-collapse v-model="activeNames">
-                <el-collapse-item title="一致性 Consistency" name="1">
-                    <el-row>
-
-                    </el-row>
-                    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-                </el-collapse-item>
-                <el-collapse-item title="反馈 Feedback" name="2">
-                    <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-                    <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
-                </el-collapse-item>
-                <el-collapse-item title="效率 Efficiency" name="3">
-                    <div>简化流程：设计简洁直观的操作流程；</div>
-                    <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-                    <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-                </el-collapse-item>
-                <el-collapse-item title="可控 Controllability" name="4">
-                    <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-                    <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
-                </el-collapse-item>
-            </el-collapse>
+            <el-row :gutter="40">
+                <el-col v-for="element in item.children">
+                    <div class="menu-box am-padding-vertical-xs">
+                        <div class="am-text-xs">{{element.name}}</div>
+                        <el-switch @change="childHandle(element.checked,item)" v-model="element.checked"></el-switch>
+                    </div>
+                </el-col>
+            </el-row>
         </el-card>
     </div>
 </template>
 
 <script>
+    import {Role} from "@/api/index";
+
     export default {
         name: "Role-Setting",
         props: ["id"],
         data() {
             return {
-                activeNames: ['1']
+                menu: [],
             };
+        },
+        created() {
+            this.loadRoleConfig(this.id);
+        },
+        methods: {
+            async loadRoleConfig(id) {
+                let {status, data} = await Role.loadConfig({id});
+                if (status) {
+                    this.menu = data;
+                }
+            },
+            /*
+            * 父级菜单switch
+            * status    switch状态
+            * children      子级菜单集合
+            * */
+            parentHandle(status, {children}) {
+                //所有子级跟随父级状态改变
+                children.forEach(function (item) {
+                    item.checked = status;
+                });
+            },
+            /*
+            * 子级菜单switch,子级菜单有一个选中，父级选中
+            * status    switch状态
+            * parentData      父级data
+            * */
+            childHandle(status, parentData) {
+                //检测子级菜单中是否有选中状态
+                let flag = parentData.children.some(item => item.checked);
+                parentData.checked = flag;
+            },
         },
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    .menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
+        .menu-title {
+            color: #409EFF;
+        }
+    }
+
+    .menu-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #909399;
+    }
 </style>

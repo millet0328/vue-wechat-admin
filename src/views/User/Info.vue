@@ -19,7 +19,7 @@
 			</el-form-item>
 			<el-form-item label="权限" label-width="100px">
 				<el-select v-model="form.role" placeholder="请选择账户">
-					<el-option v-for="item in roles" :key="item.id" :label="item.role_name" :value="item.id"></el-option>
+					<el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id"></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="头像" label-width="100px">
