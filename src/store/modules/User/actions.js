@@ -8,11 +8,11 @@ const Login = ({ commit, state }, formData) => {
 					return;
 				}
 				// 储存到state
-				commit('SetUserInfo', res.data);
+				commit('setUserInfo', res.data);
 				resolve(res);
 			})
 	});
-}
+};
 const Register = ({ commit, state }, formData) => {
 	return new Promise((resolve, reject) => {
 		User.register(formData)
@@ -22,11 +22,11 @@ const Register = ({ commit, state }, formData) => {
 					return;
 				}
 				// 储存到state
-				commit('SetUserInfo', res.data);
+				commit('setUserInfo', res.data);
 				resolve(res);
 			})
 	});
-}
+};
 const GetUserInfo = ({ commit, state }, formData) => {
 	return new Promise((resolve, reject) => {
 		User.getUserInfo(formData)
@@ -36,11 +36,11 @@ const GetUserInfo = ({ commit, state }, formData) => {
 					return;
 				}
 				// 储存到state
-				commit('SetUserInfo', res.data);
+				commit('setUserInfo', res.data);
 				resolve(res);
 			})
 	});
-}
+};
 const UpdateUserInfo = ({ commit, state }, formData) => {
 	return new Promise((resolve, reject) => {
 		User.updateUserInfo(formData)
@@ -50,11 +50,11 @@ const UpdateUserInfo = ({ commit, state }, formData) => {
 					return;
 				}
 				// 储存到state
-				commit('SetUserInfo', formData);
+				commit('setUserInfo', formData);
 				resolve(res);
 			})
 	});
-}
+};
 export default {
 	Login,
 	Register,

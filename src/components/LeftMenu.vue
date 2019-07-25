@@ -54,8 +54,16 @@
             ...mapGetters({
                 role: 'User/role',
             })
+        },
+        created() {
+            this.loadMenuTree();
+        },
+        methods: {
+            loadMenuTree() {
+                this.$store
+                    .dispatch("Menu/LoadTree", {id: sessionStorage.role})
+            }
         }
-
     }
 </script>
 

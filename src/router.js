@@ -43,23 +43,24 @@ const routes = [
         alias: "/",
     },
     {
-        path: '/index',
-        name: 'Index',
+        path: '/goods',
+        name: 'Goods',
         component: Index,
         redirect: '/goods/list',
         meta: {
             requiredAuth: true
         },
-        children: [{
-            path: '/goods/category/',
-            name: 'GoodsCategory',
-            component: GoodsCategory,
-            meta: {
-                requiredAuth: true
-            },
-        },
+        children: [
             {
-                path: "/goods/list",
+                path: 'category',
+                name: 'GoodsCategory',
+                component: GoodsCategory,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+            {
+                path: "list",
                 name: "GoodsList",
                 component: GoodsList,
                 meta: {
@@ -67,7 +68,7 @@ const routes = [
                 },
             },
             {
-                path: "/goods/release",
+                path: "release",
                 name: "GoodsRelease",
                 component: GoodsRelease,
                 meta: {
@@ -75,37 +76,58 @@ const routes = [
                 },
             },
             {
-                path: "/goods/edit/:id",
+                path: "edit/:id",
                 name: "GoodsEdit",
                 component: GoodsEdit,
                 props: true,
                 meta: {
                     requiredAuth: true
                 },
-            }, {
-                path: "/user/list",
+            }]
+    },
+    {
+        path: '/user',
+        name: 'User',
+        component: Index,
+        meta: {
+            requiredAuth: true
+        },
+        children: [
+            {
+                path: "list",
                 name: "UserList",
                 component: UserList,
                 meta: {
                     requiredAuth: true
                 },
             }, {
-                path: "/order/list",
-                name: "OrderList",
-                component: OrderList,
-                meta: {
-                    requiredAuth: true
-                },
-            }, {
-                path: "/user/info",
+                path: "info",
                 name: "UserInfo",
                 component: UserInfo,
                 meta: {
                     requiredAuth: true
                 },
             },
+        ]
+    },
+    {
+        path: '/auth',
+        name: 'Auth',
+        component: Index,
+        meta: {
+            requiredAuth: true
+        },
+        children: [
             {
-                path: "/auth/role",
+                path: "menu",
+                name: "AuthMenu",
+                component: AuthMenu,
+                meta: {
+                    requiredAuth: true
+                },
+            },
+            {
+                path: "role",
                 name: "AuthRole",
                 component: AuthRole,
                 meta: {
@@ -120,17 +142,25 @@ const routes = [
                         requiredAuth: true
                     },
                 }]
-            }, {
-                path: "/auth/menu",
-                name: "AuthMenu",
-                component: AuthMenu,
-                meta: {
-                    requiredAuth: true
-                },
-            }
-        ]
+            }]
     },
-]
+    {
+        path: '/order',
+        name: 'Index',
+        component: Index,
+        meta: {
+            requiredAuth: true
+        },
+        children: [{
+            path: "list",
+            name: "OrderList",
+            component: OrderList,
+            meta: {
+                requiredAuth: true
+            },
+        }]
+    }
+];
 
 // 3. 创建 router 实例，然后传 `routes` 配置。
 const router = new Router({

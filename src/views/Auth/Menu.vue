@@ -102,10 +102,10 @@
             async loadNode(node, resolve) {
                 // 根节点level==0
                 if (node.level === 0) {
-                    let {data} = await Menu.load({pId: 0});
+                    let {data} = await Menu.loadSub({pId: 0});
                     return resolve(data);
                 }
-                let {data} = await Menu.load({pId: node.data.id});
+                let {data} = await Menu.loadSub({pId: node.data.id});
                 resolve(data);
             },
             // 打开编辑Modal
