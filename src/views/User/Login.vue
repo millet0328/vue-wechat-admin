@@ -77,7 +77,7 @@
 										this.$router.push(this.redirect);
 										return;
 									}
-									this.$router.push('/index')
+									this.$router.push('/goods')
 								}
 							});
 						})

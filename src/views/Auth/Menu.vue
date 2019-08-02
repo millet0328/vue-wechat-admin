@@ -15,13 +15,13 @@
                     <div class="node-order">显示序号：
                         <el-tag size="mini">{{ data.order }}</el-tag>
                     </div>
-                    <el-button type="text" size="mini" :disabled="data.id==1"
+                    <el-button type="text" icon="el-icon-edit-outline" :disabled="data.id==1"
                                @click.stop="openEditModal(node,data)">编辑
                     </el-button>
-                    <el-button type="text" size="mini"
+                    <el-button type="text" icon="el-icon-plus"
                                @click.stop="openAddModal(node,data)">添加
                     </el-button>
-                    <el-button type="text" size="mini" :disabled="data.id==1"
+                    <el-button type="text" icon="el-icon-delete" :disabled="data.id==1"
                                @click.stop="openDeleteModal(node,data)">删除
                     </el-button>
                 </div>
