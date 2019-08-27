@@ -39,7 +39,7 @@
 			},
 			getUserInfo() {
 				this.$store
-					.dispatch("User/GetUserInfo", { uid: sessionStorage.uid })
+					.dispatch("User/LoadInfo", { uid: sessionStorage.uid })
 			}
 		}
 	}

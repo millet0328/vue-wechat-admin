@@ -80,7 +80,6 @@
 					.then((res) => {
 						// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
 						sessionStorage.token = res.data.token;
-						sessionStorage.uid = res.data.id;
 						sessionStorage.role = res.data.role;
 						// 跳转页面
 						this.$message({

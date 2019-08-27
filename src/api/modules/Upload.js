@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const deleteImage = (formData) => axios.post('/api/upload/delete', formData);
+const deleteImage = (formData) => axios.delete('/api/upload', formData);
 
 export default {
 	deleteImage,

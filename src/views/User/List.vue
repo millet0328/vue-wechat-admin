@@ -19,6 +19,10 @@
             </el-table-column>
             <el-table-column prop="role_name" sortable label="权限">
             </el-table-column>
+            <el-table-column prop="login_time" width="160" sortable label="上次登录">
+            </el-table-column>
+            <el-table-column prop="login_count" sortable label="登录次数">
+            </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button @click="showEditModal(scope.row)" plain icon="el-icon-edit" size="small"
@@ -75,6 +79,7 @@
     //引入service模块
     import {User, Role} from '@/api/index'
     import Title from '@/components/Title.vue';
+
     export default {
         name: "List",
         components: {
@@ -103,24 +108,20 @@
             this.loadRole();
         },
         methods: {
-            loadList(index) {
-                User.list()
-                    .then((res) => {
-                        if (res.status) {
-                            res.data.forEach(function (item) {
-                                item.uid = item.id;
-                            });
-                            this.tableData = res.data;
-                        }
+            async loadList() {
+                let {status, data} = await User.list();
+                if (status) {
+                    data.forEach(function (item) {
+                        item.uid = item.id;
                     });
+                    this.tableData = data;
+                }
             },
-            loadRole() {
-                Role.load()
-                    .then(res => {
-                        if (res.status) {
-                            this.roles = res.data;
-                        }
-                    });
+            async loadRole() {
+                let {status, data} = await Role.load();
+                if (status) {
+                    this.roles = data;
+                }
             },
             showEditModal(row) {
                 this.editModalShow = true;
@@ -129,24 +130,24 @@
             showDeleteModal(id) {
                 this.$confirm('此操作将永久删除该账户, 是否继续?', {
                     type: 'warning'
-                }).then(() => {
-                    console.log(id);
+                }).then(async () => {
+                    let {status, msg} = await User.remove({id});
+                    if (status) {
+                        this.$message.success('删除成功！');
+                        this.loadList();
+                    }
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
+                    this.$message.info('已取消删除');
                 });
             },
             // 修改账户信息
-            updateInfo() {
-                User.updateUserInfo({...this.form}).then((res) => {
-                    if (res.status) {
-                        this.editModalShow = false;
-                        this.$message.success(res.msg);
-                        this.loadList();
-                    }
-                })
+            async updateInfo() {
+                let {status, msg} = await User.update({...this.form});
+                if (status) {
+                    this.editModalShow = false;
+                    this.$message.success(msg);
+                    this.loadList();
+                }
             },
             // 上传图片之前的检查
             beforeUpload(file) {

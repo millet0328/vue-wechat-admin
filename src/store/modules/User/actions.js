@@ -27,9 +27,9 @@ const Register = ({ commit, state }, formData) => {
 			})
 	});
 };
-const GetUserInfo = ({ commit, state }, formData) => {
+const LoadInfo = ({ commit, state }, formData) => {
 	return new Promise((resolve, reject) => {
-		User.getUserInfo(formData)
+		User.loadInfo(formData)
 			.then((res) => {
 				if (!res.status) {
 					reject(res);
@@ -41,9 +41,9 @@ const GetUserInfo = ({ commit, state }, formData) => {
 			})
 	});
 };
-const UpdateUserInfo = ({ commit, state }, formData) => {
+const Update = ({ commit, state }, formData) => {
 	return new Promise((resolve, reject) => {
-		User.updateUserInfo(formData)
+		User.update(formData)
 			.then((res) => {
 				if (!res.status) {
 					reject(res);
@@ -58,6 +58,6 @@ const UpdateUserInfo = ({ commit, state }, formData) => {
 export default {
 	Login,
 	Register,
-	GetUserInfo,
-	UpdateUserInfo,
+	LoadInfo,
+	Update,
 }
