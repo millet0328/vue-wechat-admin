@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-card class="am-margin-bottom-sm" v-for="(item,index) in menu">
+        <el-card class="am-margin-bottom-sm" v-for="(item,index) in menu" :key="item.id">
             <div slot="header" class="menu-header">
                 <div class="menu-title am-text-sm">
                     <i class="el-icon-collection-tag"></i>
@@ -9,7 +9,7 @@
                 <el-switch @change="parentHandle(item)" v-model="item.checked"></el-switch>
             </div>
             <el-row :gutter="40">
-                <el-col v-for="element in item.children">
+                <el-col v-for="element in item.children" :key="element.id">
                     <div class="menu-box am-padding-vertical-xs">
                         <div class="am-text-xs">{{element.name}}</div>
                         <el-switch @change="childHandle(element,item)" v-model="element.checked"></el-switch>

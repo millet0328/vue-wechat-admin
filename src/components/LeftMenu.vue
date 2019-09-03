@@ -1,11 +1,11 @@
 <template>
     <el-menu :collapse="isCollapse" :default-openeds="['0']" background-color="#545c64" router text-color="#fff"
              active-text-color="#ffd04b">
-        <el-submenu v-for="(item,index) in menuTree" :index="index.toString()">
+        <el-submenu v-for="(item,index) in menuTree" :key="item.id" :index="index.toString()">
             <template slot="title">
                 <span slot="title">{{item.name}}</span>
             </template>
-            <el-menu-item v-for="element in item.children" :index="element.path">{{element.name}}</el-menu-item>
+            <el-menu-item v-for="element in item.children" :key="element.id" :index="element.path">{{element.name}}</el-menu-item>
         </el-submenu>
 <!--        <el-submenu index="1">-->
 <!--            <template slot="title">-->

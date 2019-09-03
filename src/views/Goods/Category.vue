@@ -6,13 +6,13 @@
             <div class="node-box" slot-scope="{ node, data }">
                 <span class="node-name">{{ node.label }}</span>
                 <span class="node-action">
-					<el-button type="text" size="mini" :disabled="data.id==1" @click.stop="openEditModal(node,data)">
+					<el-button type="text" icon="el-icon-edit-outline" size="mini" :disabled="data.id==1" @click.stop="openEditModal(node,data)">
 						编辑
 					</el-button>
-					<el-button type="text" size="mini" @click.stop="openAddModal(node,data)">
+					<el-button type="text" icon="el-icon-plus"  size="mini" @click.stop="openAddModal(node,data)">
 						添加
 					</el-button>
-					<el-button type="text" size="mini" :disabled="data.id==1" @click.stop="openDeleteModal(node,data)">
+					<el-button type="text" icon="el-icon-delete" size="mini" :disabled="data.id==1" @click.stop="openDeleteModal(node,data)">
 						删除
 					</el-button>
 				</span>
