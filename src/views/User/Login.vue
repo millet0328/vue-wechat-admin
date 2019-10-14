@@ -1,32 +1,25 @@
 <template>
 	<div class="bg">
-		<div class="form-box">
-			<form action="">
-				<div class="title">欢迎登陆</div>
-				<div class="body">
-					<div class="form-control" :class="{error:!valid[0]}">
-						<div class="add-on">
-							<i class="fa fa-user"></i>
-						</div>
-						<input type="text" class="input-control" @blur="checkUsername" v-model="formData.username" placeholder="请输入账户名">
-					</div>
-					<div class="form-control" :class="{error:!valid[1]}">
-						<div class="add-on">
-							<i class="fa fa-lock"></i>
-						</div>
-						<input type="password" pattern="[1-9]\d{6,}" @blur="checkPassword" class="input-control" v-model="formData.password"
-						 placeholder="请输入密码">
-					</div>
-					<div class="form-control">
-						<button class="btn" @click.enter="regHandle" type="button">登 录</button>
-					</div>
-					<div class="link-box">
-						<router-link to="/register">注册账户</router-link>
-						<router-link to="/register">忘记密码？</router-link>
-					</div>
-				</div>
-			</form>
-		</div>
+		<el-card shadow="always" class="box-card form-box">
+			<div slot="header">
+				<span>欢迎登录</span>
+			</div>
+			<el-form ref="form" :rules="rules" size="medium" :model="form" label-width="60px">
+				<el-form-item label="账户" prop="username">
+					<el-input placeholder="请输入账户名!" prefix-icon="el-icon-user" v-model="form.username"></el-input>
+				</el-form-item>
+				<el-form-item label="密码" prop="password">
+					<el-input placeholder="请输入密码!" prefix-icon="el-icon-key" type="password" v-model="form.password"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="loginHandle">登录</el-button>
+				</el-form-item>
+			</el-form>
+			<div class="link-box">
+				<router-link to="/register">注册账户</router-link>
+				<router-link to="/">忘记密码？</router-link>
+			</div>
+		</el-card>
 	</div>
 </template>
 
@@ -35,65 +28,63 @@
 		props: ["redirect"],
 		data() {
 			return {
-				formData: {
+				form: {
 					username: "",
 					password: "",
 				},
-				valid: [true, true],
+				rules: {
+					username: [
+						{ required: true, message: '请输入用户名！', trigger: 'blur' },
+						{ min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+					],
+					password: [
+						{ required: true, message: '请输入密码！', trigger: 'blur' },
+						{ type: 'string', pattern: /^[0-9]{3,}$/, message: '密码至少3位数字', trigger: 'blur' },
+					]
+				}
 			}
 		},
 		methods: {
-			checkUsername() {
-				let usernameReg = /[A-Za-z0-9_-]{5,}/; //至少6位字母或者数字
-				let flag = usernameReg.test(this.formData.username);
-				this.$set(this.valid, 0, flag);
-				return flag;
-			},
-			checkPassword() {
-				let passwordReg = /\d{6,}/; //至少6位数字
-				let flag = passwordReg.test(this.formData.password);
-				this.$set(this.valid, 1, flag);
-				return flag;
-			},
-			regHandle() {
-				// 表单验证
-				let isValid = this.checkUsername() && this.checkPassword();
-				// 验证通过
-				if (isValid) {
-					this.$store
-						.dispatch('User/Login', { ...this.formData })
-						.then((res) => {
-							// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-							sessionStorage.token = res.data.token;
-							sessionStorage.role = res.data.role;
-							// 跳转页面
-							this.$message({
-								message: res.msg,
-								type: 'success',
-								duration: 1000,
-								onClose: () => {
-									if (this.redirect) {
-										this.$router.push(this.redirect);
-										return;
+			loginHandle() {
+				// 提取数据
+				this.$refs.form.validate(async (valid) => {
+					if (valid) {
+						this.$store
+							.dispatch('User/Login', { ...this.form })
+							.then(({ data, msg }) => {
+								// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
+								sessionStorage.token = data.token;
+								sessionStorage.role = data.role;
+								sessionStorage.id = data.id;
+								// 跳转页面
+								this.$message({
+									message: msg,
+									type: 'success',
+									duration: 1000,
+									onClose: () => {
+										if (this.redirect) {
+											this.$router.replace(this.redirect);
+											return;
+										}
+										this.$router.push('/goods')
 									}
-									this.$router.push('/goods')
-								}
+								});
+							})
+							.catch(({ msg }) => {
+								this.$message.error(msg);
 							});
-						})
-						.catch((res) => {
-							this.$message.error(res.msg);
-						});
-				}
-			}
+					}
+				});
+			},
 		}
 	}
 </script>
 
-<style scoped="scoped" lang="scss">
+<style scoped lang="scss">
 	.bg {
 		width: 100vw;
 		height: 100vh;
-		background: url(../../assets/img/reg/login-bg.jpg);
+		background: url(../../assets/img/login/login-bg.jpg);
 		background-size: cover;
 		position: relative;
 
@@ -107,96 +98,10 @@
 			font-size: 14px;
 			width: 360px;
 
-			.title {
-				font-size: 16px;
-				font-weight: bold;
-				color: #666;
-				padding: 15px 20px;
-				border-bottom: 1px solid #eee;
-			}
-
-			.body {
-				padding: 30px 20px;
-				padding-top: 0;
-			}
-
-
-			.form-control {
-				padding-top: 30px;
-				display: flex;
-				align-items: center;
-
-				.add-on {
-					height: 32px;
-					width: 32px;
-					border: 1px solid #eee;
-					border-right: 0;
-					text-align: center;
-					background-color: #f8f8f9;
-					color: #515a6e;
-					border-top-left-radius: 3px;
-					border-bottom-left-radius: 3px;
-
-					i.fa {
-						line-height: 32px;
-					}
-
-					.fa-mobile {
-						font-size: 20px;
-					}
-				}
-
-				.input-control,
-				.sex-box {
-					flex: 1;
-					padding: 4px 7px;
-					height: 24px;
-					border: 1px solid #eee;
-					border-top-right-radius: 3px;
-					border-bottom-right-radius: 3px;
-				}
-
-				.sex-box {
-					display: flex;
-					align-items: center;
-
-					label {
-						display: flex;
-						align-items: center;
-						margin-right: 30px;
-
-						i {
-							margin: 0 8px;
-						}
-					}
-				}
-
-				.btn {
-					flex: 1;
-					color: #fff;
-					background-color: #2d8cf0;
-					border: 1px solid #2d8cf0;
-					padding: 8px 15px;
-					font-size: 12px;
-					border-radius: 4px;
-					outline: 0;
-				}
-			}
-
-			.error {
-
-				.input-control,
-				.sex-box {
-					border-color: red;
-				}
-			}
-
 			.link-box {
-				padding-top: 20px;
 				display: flex;
-				align-items: center;
 				justify-content: space-between;
-				font-size: 12px;
+				align-items: center;
 			}
 		}
 	}

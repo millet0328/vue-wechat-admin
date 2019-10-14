@@ -12,6 +12,5 @@
 
 <style lang="scss">
     // css公共类
-    @import url("./assets/css/reset.css");
-    @import url('./assets/lib/font-awesome-4.7.0/css/font-awesome.min.css');
+    @import url("./assets/css/base.css");
 </style>

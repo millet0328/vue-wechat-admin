@@ -1,0 +1,179 @@
+.am-margin {
+	margin: 16px;
+}
+
+.am-margin-0 {
+	margin: 0 !important;
+}
+
+.am-margin-xs {
+	margin: 5px;
+}
+
+.am-margin-sm {
+	margin: 10px;
+}
+
+.am-margin-lg {
+	margin: 24px;
+}
+
+.am-margin-xl {
+	margin: 32px;
+}
+
+.am-margin-horizontal {
+	margin-left: 16px;
+	margin-right: 16px;
+}
+
+.am-margin-horizontal-0 {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+.am-margin-horizontal-xs {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.am-margin-horizontal-sm {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.am-margin-horizontal-lg {
+	margin-left: 24px;
+	margin-right: 24px;
+}
+
+.am-margin-horizontal-xl {
+	margin-left: 32px;
+	margin-right: 32px;
+}
+
+.am-margin-vertical {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+.am-margin-vertical-0 {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.am-margin-vertical-xs {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.am-margin-vertical-sm {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.am-margin-vertical-lg {
+	margin-top: 24px;
+	margin-bottom: 24px;
+}
+
+.am-margin-vertical-xl {
+	margin-top: 32px;
+	margin-bottom: 32px;
+}
+
+.am-margin-top {
+	margin-top: 16px;
+}
+
+.am-margin-top-0 {
+	margin-top: 0 !important;
+}
+
+.am-margin-top-xs {
+	margin-top: 5px;
+}
+
+.am-margin-top-sm {
+	margin-top: 10px;
+}
+
+.am-margin-top-lg {
+	margin-top: 24px;
+}
+
+.am-margin-top-xl {
+	margin-top: 32px;
+}
+
+.am-margin-bottom {
+	margin-bottom: 16px;
+}
+
+.am-margin-bottom-0 {
+	margin-bottom: 0 !important;
+}
+
+.am-margin-bottom-xs {
+	margin-bottom: 5px;
+}
+
+.am-margin-bottom-sm {
+	margin-bottom: 10px;
+}
+
+.am-margin-bottom-lg {
+	margin-bottom: 24px;
+}
+
+.am-margin-bottom-xl {
+	margin-bottom: 32px;
+}
+
+.am-margin-left {
+	margin-left: 16px;
+}
+
+.am-margin-left-0 {
+	margin-left: 0 !important;
+}
+
+.am-margin-left-xs {
+	margin-left: 5px;
+}
+
+.am-margin-left-sm {
+	margin-left: 10px;
+}
+
+.am-margin-left-lg {
+	margin-left: 24px;
+}
+
+.am-margin-left-xl {
+	margin-left: 32px;
+}
+
+.am-margin-right {
+	margin-right: 16px;
+}
+
+.am-margin-right-0 {
+	margin-right: 0 !important;
+}
+
+.am-margin-right-xs {
+	margin-right: 5px;
+}
+
+.am-margin-right-sm {
+	margin-right: 10px;
+}
+
+.am-margin-right-lg {
+	margin-right: 24px;
+}
+
+.am-margin-right-xl {
+	margin-right: 32px;
+}

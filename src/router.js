@@ -36,7 +36,7 @@ const routes = [
         component: UserRegister,
     },
     {
-        path: '/login/',
+        path: '/login',
         name: 'UserLogin',
         component: UserLogin,
         props: (route) => route.query,

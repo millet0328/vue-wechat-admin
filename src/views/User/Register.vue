@@ -1,60 +1,40 @@
 <template>
 	<div class="bg">
-		<div class="form-box">
-			<form action="">
-				<div class="title">注册新账户</div>
-				<div class="body">
-					<div class="form-control">
-						<div class="add-on">
-							<i class="fa fa-user"></i>
-						</div>
-						<input type="text" v-model="formData.username" class="input-control" placeholder="请输入账户名">
-					</div>
-					<div class="form-control">
-						<div class="add-on">
-							<i class="fa fa-lock"></i>
-						</div>
-						<input type="password" v-model="formData.password" class="input-control" placeholder="请输入密码">
-					</div>
-					<div class="form-control">
-						<div class="add-on">
-							<i class="fa fa-tag"></i>
-						</div>
-						<input type="text" v-model="formData.nickname" class="input-control" placeholder="请输入昵称">
-					</div>
-					<div class="form-control">
-						<div class="add-on">
-							<i class="fa fa-venus-mars"></i>
-						</div>
-						<div class="sex-box">
-							<label for="man">
-								<input checked name="sex" v-model="formData.sex" value="男" id="man" type="radio">
-								<i class="fa fa-mars"></i>
-								男
-							</label>
-							<label for="woman">
-								<input id="woman" name="sex" v-model="formData.sex" value="女" type="radio">
-								<i class="fa fa-venus"></i>
-								女
-							</label>
-						</div>
-					</div>
-					<div class="form-control">
-						<div class="add-on">
-							<i class="fa fa-mobile"></i>
-						</div>
-						<input type="number" v-model="formData.tel" class="input-control" placeholder="请输入手机号码">
-					</div>
-					<div class="form-control">
-						<button class="btn" @click="regHandle" type="button">注 册</button>
-					</div>
-					<div class="link-box">
-						<router-link to="/login">密码登录</router-link>
-						<router-link to="/register">忘记密码？</router-link>
-					</div>
-				</div>
-			</form>
-		</div>
+		<el-card shadow="always" class="box-card form-box">
+			<div slot="header">
+				<span>注册</span>
+			</div>
+			<el-form ref="form" :rules="rules" size="medium" :model="form" label-width="60px">
+				<el-form-item prop="username" label="账户">
+					<el-input placeholder="账户名长度在 3 到 15 个字符!" prefix-icon="el-icon-user" v-model="form.username"></el-input>
+				</el-form-item>
+				<el-form-item prop="password" label="密码">
+					<el-input placeholder="密码至少3位数字!" prefix-icon="el-icon-key" type="password" v-model="form.password"></el-input>
+				</el-form-item>
+				<el-form-item prop="fullname" label="姓名">
+					<el-input placeholder="请填写真实姓名" prefix-icon="el-icon-postcard" v-model="form.fullname"></el-input>
+				</el-form-item>
+				<el-form-item prop="sex" label="性别">
+					<el-radio-group v-model="form.sex">
+						<el-radio label="男"></el-radio>
+						<el-radio label="女"></el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item prop="tel" label="手机">
+					<el-input placeholder="请填写常用手机号码!" prefix-icon="el-icon-mobile-phone" v-model="form.tel"></el-input>
+				</el-form-item>
+				<el-form-item prop="isAgree">
+					<el-checkbox v-model="form.isAgree" label="同意本站用户协议"></el-checkbox>
+				</el-form-item>
+				<el-form-item>
+					<el-button @click="registerHandle" type="primary">注 册</el-button>
+				</el-form-item>
+			</el-form>
+			<div class="link-box">
+				<router-link to="/login">登录账户</router-link>
+				<router-link to="/">忘记密码？</router-link>
+			</div>
+		</el-card>
 	</div>
 </template>
 
@@ -62,38 +42,64 @@
 	export default {
 		data() {
 			return {
-				formData: {
+				form: {
 					username: '',
 					password: '',
-					nickname: '',
-					sex: '',
+					fullname: '',
+					sex: '男',
 					tel: '',
+					isAgree: [],
+				},
+				rules: {
+					username: [
+						{ required: true, message: '请输入用户名！', trigger: 'blur' },
+						{ type: 'string', min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+					],
+					password: [
+						{ required: true, message: '请输入密码！', trigger: 'blur' },
+						{ type: 'string', pattern: /^[0-9]{3,}$/, message: '密码至少3位数字', trigger: 'blur' },
+					],
+					fullname: [
+						{ required: true, message: '请输入真实姓名！', trigger: 'blur' },
+						{ type: 'string', pattern: /^[\u4E00-\u9FA5A-Za-z\s]+(·[\u4E00-\u9FA5A-Za-z]+)*$/, message: '请输入有效的姓名', trigger: 'blur' }
+					],
+					tel: [
+						{ required: true, message: '请输入手机号码！', trigger: 'blur' },
+						{ type: 'string', pattern: /^1(3|4|5|6|7|8|9)\d{9}$/, message: '请输入有效的手机号码', trigger: 'blur' }
+					],
+					isAgree: [
+						{ required: true, message: '请同意用户协议', trigger: 'change' },
+					]
 				}
 			}
 		},
 		methods: {
-			regHandle() {
+			registerHandle() {
 				// 1.表单验证
-				// 2.提取数据
-				this.$store
-					.dispatch('User/Register', { ...this.formData })
-					.then((res) => {
-						// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-						sessionStorage.token = res.data.token;
-						sessionStorage.role = res.data.role;
-						// 跳转页面
-						this.$message({
-							message: res.msg,
-							type: 'success',
-							duration: 1000,
-							onClose: () => {
-								this.$router.push('/index')
-							}
-						});
-					})
-					.catch((res) => {
-						this.$message.error(res.msg);
-					})
+				this.$refs.form.validate((valid, obj) => {
+					if (valid) {
+						// 2.提取数据
+						this.$store
+							.dispatch('User/Register', { ...this.form })
+							.then(({ msg, data }) => {
+								// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
+								sessionStorage.token = data.token;
+								sessionStorage.role = data.role;
+								// 跳转页面
+								this.$message({
+									message: msg,
+									type: 'success',
+									duration: 1000,
+									onClose: () => {
+										this.$router.push('/goods')
+									}
+								});
+							})
+							.catch(({ msg }) => {
+								this.$message.error(msg);
+							})
+					}
+				});
 			},
 		}
 	}
@@ -103,7 +109,7 @@
 	.bg {
 		width: 100vw;
 		height: 100vh;
-		background: url(../../assets/img/reg/login-bg.jpg);
+		background: url(../../assets/img/login/login-bg.jpg);
 		background-size: cover;
 		position: relative;
 
@@ -117,89 +123,11 @@
 			font-size: 14px;
 			width: 360px;
 
-			.title {
-				font-size: 16px;
-				font-weight: bold;
-				color: #666;
-				padding: 15px 20px;
-				border-bottom: 1px solid #eee;
-			}
-
-			.body {
-				padding: 30px 20px;
-				padding-top: 0;
-			}
-
-			.form-control {
-				padding-top: 30px;
-				display: flex;
-				align-items: center;
-
-				.add-on {
-					height: 32px;
-					width: 32px;
-					border: 1px solid #eee;
-					border-right: 0;
-					text-align: center;
-					background-color: #f8f8f9;
-					color: #515a6e;
-					border-top-left-radius: 3px;
-					border-bottom-left-radius: 3px;
-
-					i.fa {
-						line-height: 32px;
-					}
-
-					.fa-mobile {
-						font-size: 20px;
-					}
-				}
-
-				.input-control,
-				.sex-box {
-					flex: 1;
-					padding: 4px 7px;
-					height: 24px;
-					border: 1px solid #eee;
-					border-top-right-radius: 3px;
-					border-bottom-right-radius: 3px;
-				}
-
-				.sex-box {
-					display: flex;
-					align-items: center;
-
-					label {
-						display: flex;
-						align-items: center;
-						margin-right: 30px;
-
-						i {
-							margin: 0 8px;
-						}
-					}
-				}
-
-				.btn {
-					flex: 1;
-					color: #fff;
-					background-color: #2d8cf0;
-					border: 1px solid #2d8cf0;
-					padding: 8px 15px;
-					font-size: 12px;
-					border-radius: 4px;
-					outline: 0;
-				}
-			}
-
 			.link-box {
-				padding-top: 20px;
 				display: flex;
-				align-items: center;
 				justify-content: space-between;
-				font-size: 12px;
+				align-items: center;
 			}
-
 		}
 	}
 </style>

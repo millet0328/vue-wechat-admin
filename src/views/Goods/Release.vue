@@ -1,151 +1,152 @@
 <template>
 	<div>
-		<Title text="发布新商品"></Title>
-		<el-form ref="form" :model="form" label-position="left" label-width="120px">
-			<el-form-item label="商品分类">
-				<el-select v-model="form.cate_1st" placeholder="请选择分类">
-					<el-option v-for="item in cate_1st_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-				</el-select>
-				<el-select v-model="form.cate_2nd" placeholder="请选择分类">
-					<el-option v-for="item in cate_2nd_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-				</el-select>
-				<el-select v-model="form.cate_3rd" placeholder="请选择分类">
-					<el-option v-for="item in cate_3rd_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="商品名称">
-				<el-col :span="14">
-					<el-input v-model.trim="form.name"></el-input>
-				</el-col>
-				<el-col :span="24" class="tip">商品标题名称长度至少3个字符，最长200个汉字</el-col>
-			</el-form-item>
-			<el-form-item label="商品卖点">
-				<el-col :span="14">
-					<el-input type="textarea" v-model.trim="form.hotPoint"></el-input>
-				</el-col>
-				<el-col :span="24" class="tip">商品卖点不能超过140个汉字</el-col>
-			</el-form-item>
-			<el-form-item label="商品价格">
-				<el-col :span="3">
-					<el-input v-model.trim.number="form.price">
-						<template slot="append">元</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">价格必须是0-999999之间的数字，且不能高于市场价</el-col>
-				<el-col :span="24" class="tip">此价格为商品实际销售价格，如果商品存在规格，改价格显示最低价格</el-col>
-			</el-form-item>
-			<el-form-item label="市场价">
-				<el-col :span="3">
-					<el-input v-model.trim.number="form.marketPrice">
-						<template slot="append">元</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">价格必须是0-999999之间的数字，此价格仅为市场参考价，请根据实际情况认真填写</el-col>
-			</el-form-item>
-			<el-form-item label="成本价">
-				<el-col :span="3">
-					<el-input v-model.trim.number="form.cost">
-						<template slot="append">元</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">价格必须是0-999999之间的数字，此价格为商户对所销售的商品的实际成本价进行备注记录，非必填选项，不会在前台销售页面中显示</el-col>
-			</el-form-item>
-			<el-form-item label="折扣">
-				<el-col :span="3">
-					<el-input readonly v-model="discount">
-						<template slot="append">折</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">根据销售价与市场价比例自动生成不需要编辑</el-col>
-			</el-form-item>
-			<el-form-item label="商品库存">
-				<el-col :span="3">
-					<el-input v-model.trim.number="form.inventory">
-						<template slot="append">件</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">价格必须是0-999999之间的整数</el-col>
-				<el-col :span="24" class="tip">若启动了库存配置，则系统自动计算商品的总数，此处无需卖家填写</el-col>
-			</el-form-item>
-			<el-form-item label="商品货号">
-				<el-col :span="3">
-					<el-input v-model.trim="form.articleNo"></el-input>
-				</el-col>
-				<el-col :span="24" class="tip">商品货号是商家管理商品的编号，买家不可见</el-col>
-				<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
-			</el-form-item>
-			<el-form-item label="商品主图">
-				<el-upload :limit="1" list-type="picture-card" action="/api/upload/goods/" :headers="headers" :before-upload="handleBeforeUpload"
-				 :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError"
-				 :on-preview="handleCardPreview">
-					<i class="el-icon-plus"></i>
-				</el-upload>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
-					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
-			</el-form-item>
-			<el-form-item label="商品轮播图">
-				<el-upload :limit="6" list-type="picture-card" action="/api/upload/slider/" :headers="headers" :before-upload="handleBeforeUpload"
-				 :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove"
-				 :on-error="handleError" :on-preview="handleCardPreview">
-					<i class="el-icon-plus"></i>
-				</el-upload>
-				<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
-					800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
-			</el-form-item>
-			<div class="section-title">商品详情描述</div>
-			<el-form-item label="商品品牌">
-				<el-col :span="14">
-					<el-input v-model.trim="form.brand"></el-input>
-				</el-col>
-			</el-form-item>
-			<el-form-item label="商品描述">
-				<div ref="toolbar" class="w-e-toolbar"></div>
-				<div ref="editor" class="w-e-text-container"></div>
-			</el-form-item>
-			<div class="section-title">商品物流信息</div>
-			<el-form-item label="所在地">
-				<el-select v-model="form.province" placeholder="请选择活动区域">
-					<el-option label="区域一" value="shanghai"></el-option>
-					<el-option label="区域二" value="beijing"></el-option>
-					<el-option label="区域三" value="beijing"></el-option>
-				</el-select>
-				<el-select v-model="form.city" placeholder="请选择活动区域">
-					<el-option label="区域一" value="shanghai"></el-option>
-					<el-option label="区域二" value="beijing"></el-option>
-					<el-option label="区域三" value="beijing"></el-option>
-				</el-select>
-				<el-select v-model="form.area" placeholder="请选择活动区域">
-					<el-option label="区域一" value="shanghai"></el-option>
-					<el-option label="区域二" value="beijing"></el-option>
-					<el-option label="区域三" value="beijing"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="运费">
-				<el-col :span="3">
-					<el-input v-model.trim="form.freight">
-						<template slot="append">元</template>
-					</el-input>
-				</el-col>
-				<el-col :span="24" class="tip">运费设为0，前台商品将显示免运费</el-col>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="success" @click="releaseHandle">提交</el-button>
-			</el-form-item>
-		</el-form>
-		<!-- 图片预览 -->
-		<el-dialog width="30%" :visible.sync="dialogVisible">
-			<img width="100%" :src="dialogImageUrl" alt="">
-		</el-dialog>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">
+				<span>发布新商品</span>
+			</div>
+			<el-form ref="form" :model="form" label-position="left" label-width="120px">
+				<el-form-item label="商品分类">
+					<el-select v-model="form.cate_1st" placeholder="请选择分类">
+						<el-option v-for="item in cate_1st_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select>
+					<el-select v-model="form.cate_2nd" placeholder="请选择分类">
+						<el-option v-for="item in cate_2nd_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select>
+					<el-select v-model="form.cate_3rd" placeholder="请选择分类">
+						<el-option v-for="item in cate_3rd_options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="商品名称">
+					<el-col :span="14">
+						<el-input v-model.trim="form.name"></el-input>
+					</el-col>
+					<el-col :span="24" class="tip">商品标题名称长度至少3个字符，最长200个汉字</el-col>
+				</el-form-item>
+				<el-form-item label="商品卖点">
+					<el-col :span="14">
+						<el-input type="textarea" v-model.trim="form.hotPoint"></el-input>
+					</el-col>
+					<el-col :span="24" class="tip">商品卖点不能超过140个汉字</el-col>
+				</el-form-item>
+				<el-form-item label="商品价格">
+					<el-col :span="3">
+						<el-input v-model.trim.number="form.price">
+							<template slot="append">元</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">价格必须是0-999999之间的数字，且不能高于市场价</el-col>
+					<el-col :span="24" class="tip">此价格为商品实际销售价格，如果商品存在规格，改价格显示最低价格</el-col>
+				</el-form-item>
+				<el-form-item label="市场价">
+					<el-col :span="3">
+						<el-input v-model.trim.number="form.marketPrice">
+							<template slot="append">元</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">价格必须是0-999999之间的数字，此价格仅为市场参考价，请根据实际情况认真填写</el-col>
+				</el-form-item>
+				<el-form-item label="成本价">
+					<el-col :span="3">
+						<el-input v-model.trim.number="form.cost">
+							<template slot="append">元</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">价格必须是0-999999之间的数字，此价格为商户对所销售的商品的实际成本价进行备注记录，非必填选项，不会在前台销售页面中显示</el-col>
+				</el-form-item>
+				<el-form-item label="折扣">
+					<el-col :span="3">
+						<el-input readonly v-model="discount">
+							<template slot="append">折</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">根据销售价与市场价比例自动生成不需要编辑</el-col>
+				</el-form-item>
+				<el-form-item label="商品库存">
+					<el-col :span="3">
+						<el-input v-model.trim.number="form.inventory">
+							<template slot="append">件</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">价格必须是0-999999之间的整数</el-col>
+					<el-col :span="24" class="tip">若启动了库存配置，则系统自动计算商品的总数，此处无需卖家填写</el-col>
+				</el-form-item>
+				<el-form-item label="商品货号">
+					<el-col :span="3">
+						<el-input v-model.trim="form.articleNo"></el-input>
+					</el-col>
+					<el-col :span="24" class="tip">商品货号是商家管理商品的编号，买家不可见</el-col>
+					<el-col :span="24" class="tip">最多输入20个字符，只支持输入中文、字母、数字、_、/、-和小数点</el-col>
+				</el-form-item>
+				<el-form-item label="商品主图">
+					<el-upload :limit="1" list-type="picture-card" action="/api/upload/goods/" :headers="headers" :before-upload="handleBeforeUpload"
+					 :on-success="handleMainSuccess" :before-remove="handleMainBeforeRemove" :on-exceed="handleMainExceed" :on-error="handleError"
+					 :on-preview="handleCardPreview">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+						800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				</el-form-item>
+				<el-form-item label="商品轮播图">
+					<el-upload :limit="6" list-type="picture-card" action="/api/upload/slider/" :headers="headers" :before-upload="handleBeforeUpload"
+					 :on-success="handleSliderSuccess" :on-exceed="handleSliderExceed" :before-remove="handleSliderBeforeRemove"
+					 :on-error="handleError" :on-preview="handleCardPreview">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-col :span="24" class="tip">上传商品默认主图，如多规格时将默认图片或分规格上传规格主图，支持jpg、if、png格式上传或从图片空间选中，建议使用尺寸
+						800*800像素以上，大小不超过1M的正方形图片，上传后的图片将自动保存在图片空间的默认分类中</el-col>
+				</el-form-item>
+				<div class="section-title">商品详情描述</div>
+				<el-form-item label="商品品牌">
+					<el-col :span="14">
+						<el-input v-model.trim="form.brand"></el-input>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="商品描述">
+					<div ref="toolbar" class="w-e-toolbar"></div>
+					<div ref="editor" class="w-e-text-container"></div>
+				</el-form-item>
+				<div class="section-title">商品物流信息</div>
+				<el-form-item label="所在地">
+					<el-select v-model="form.province" placeholder="请选择活动区域">
+						<el-option label="区域一" value="shanghai"></el-option>
+						<el-option label="区域二" value="beijing"></el-option>
+						<el-option label="区域三" value="beijing"></el-option>
+					</el-select>
+					<el-select v-model="form.city" placeholder="请选择活动区域">
+						<el-option label="区域一" value="shanghai"></el-option>
+						<el-option label="区域二" value="beijing"></el-option>
+						<el-option label="区域三" value="beijing"></el-option>
+					</el-select>
+					<el-select v-model="form.area" placeholder="请选择活动区域">
+						<el-option label="区域一" value="shanghai"></el-option>
+						<el-option label="区域二" value="beijing"></el-option>
+						<el-option label="区域三" value="beijing"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="运费">
+					<el-col :span="3">
+						<el-input v-model.trim="form.freight">
+							<template slot="append">元</template>
+						</el-input>
+					</el-col>
+					<el-col :span="24" class="tip">运费设为0，前台商品将显示免运费</el-col>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="success" @click="releaseHandle">提交</el-button>
+				</el-form-item>
+			</el-form>
+			<!-- 图片预览 -->
+			<el-dialog width="30%" :visible.sync="dialogVisible">
+				<img width="100%" :src="dialogImageUrl" alt="">
+			</el-dialog>
+		</el-card>
 	</div>
 </template>
 <script>
 	import { Upload, Category, Goods } from '@/api/index';
 	import E from "wangeditor";
-	import Title from '@/components/Title.vue';
+
 	export default {
-		components: {
-			Title
-		},
 		data() {
 			return {
 				dialogImageUrl: '',
@@ -182,9 +183,9 @@
 		},
 		computed: {
 			discount() {
-				let discount = (this.form.price / this.form.marketPrice * 10).toFixed(2);
-				this.form.discount = discount;
-				switch (discount) {
+				let num = (this.form.price / this.form.marketPrice * 10).toFixed(2);
+				this.form.discount = num;
+				switch (num) {
 					case 'NaN':
 						return '';
 						break;
@@ -192,10 +193,10 @@
 						return '';
 						break;
 					default:
-						return discount;
+						return num;
 						break;
 				}
-			}
+			},
 		},
 		mounted() {
 			const editor = new E(this.$refs.toolbar, this.$refs.editor);
@@ -250,14 +251,13 @@
 					this.$message.error(msg);
 				}
 			},
-			handleMainSuccess(response, file, fileList) {
-				if (response.status) {
-					this.form.img_lg = response.lgImg;
-					this.form.img_md = response.mdImg;
+			handleMainSuccess({ status, lgImg, mdImg }) {
+				if (status) {
+					this.form.img_lg = lgImg;
+					this.form.img_md = mdImg;
 				}
 			},
-			handleError(err, file, fileList) {
-				let { status, message } = err;
+			handleError({ status, message }, file, fileList) {
 				switch (status) {
 					case 401:
 						this.$message.error(`错误:401,Token失效,请重新登录!`);
@@ -285,8 +285,8 @@
 			},
 			async handleMainBeforeRemove(file, fileList) {
 				try {
-					let res1 = await Upload.deleteImage({ src: '.' + file.response.lgImg });
-					let res2 = await Upload.deleteImage({ src: '.' + file.response.mdImg });
+					let res1 = await Upload.remove({ src: '.' + file.response.lgImg });
+					let res2 = await Upload.remove({ src: '.' + file.response.mdImg });
 					if (res1.status && res2.status) {
 						//清空图片
 						this.form.img_lg = '';
@@ -315,9 +315,7 @@
 				this.$message.warning(`当前限制选择 6 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 			},
 			async handleSliderBeforeRemove(file, fileList) {
-				let {status} = await Upload.deleteImage({
-					src: "." + file.response.src
-				});
+				let { status } = await Upload.remove({ src: "." + file.response.src });
 				if (status) {
 					let i = fileList.findIndex(item => item.url == file.response.src);
 					let copy = [...fileList];
@@ -338,7 +336,7 @@
 			},
 			//发布商品
 			async releaseHandle() {
-				let { status } = await Goods.release(this.form);
+				let { status } = await Goods.release({ ...this.form });
 				if (status) {
 					this.$message.success('发布商品成功！');
 				}

@@ -31,6 +31,7 @@
 
 		.el-header {
 			line-height: 60px;
+			background-color: #31404e;
 		}
 
 		.el-main {

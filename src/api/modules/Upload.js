@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const deleteImage = (formData) => axios.delete('/api/upload', formData);
+const remove = (formData) => axios.delete('/api/upload', { params: formData });
 
 export default {
-	deleteImage,
+	remove,
 }

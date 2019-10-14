@@ -1,17 +1,19 @@
-import UserModule from './modules/User';
-import CategoryModule from './modules/Category';
-import GoodsModule from './modules/Goods';
-import RoleModule from './modules/Role';
-import OrderModule from './modules/Order';
-import UploadModule from './modules/Upload';
-import MenuModule from './modules/Menu';
+import User from './modules/User';
+import Category from './modules/Category';
+import Goods from './modules/Goods';
+import Role from './modules/Role';
+import Order from './modules/Order';
+import Upload from './modules/Upload';
+import Menu from './modules/Menu';
+import Icon from './modules/Icon';
 
 export {
-	UserModule as User,
-	CategoryModule as Category,
-	GoodsModule as Goods,
-	RoleModule as Role,
-	MenuModule as Menu,
-	OrderModule as Order,
-	UploadModule as Upload,
+	User,
+	Category,
+	Goods,
+	Role,
+	Menu,
+	Order,
+	Upload,
+	Icon,
 };

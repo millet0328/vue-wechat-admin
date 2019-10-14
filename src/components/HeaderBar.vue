@@ -1,20 +1,21 @@
 <template>
-	<div class="clearfix">
-		<img src="../assets/img/common/logo.png" class="am-text-middle" height="40" />
-		<i @click="collapseHandle" class="el-icon-menu am-text-middle am-margin-left-xl"></i>
-		<div class="pull-right">
-			<el-dropdown class="white" trigger="click">
-				<span class="am-text-middle am-margin-right-sm">
-					{{nickname}}
-				</span>
-				<img class="am-text-middle" width="20" :src="avatar" />
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>消息</el-dropdown-item>
-					<el-dropdown-item>设置</el-dropdown-item>
-					<el-dropdown-item>退出</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
+	<div class="nav-bar">
+		<div class="left">
+			<img class="logo am-margin-right-sm" src="../assets/img/common/logo.png">
+			<i @click="collapseHandle" class="el-icon-s-fold"></i>
 		</div>
+		<el-menu mode="horizontal" router :default-active="activeIndex" background-color="#31404e" text-color="#fff"
+		 active-text-color="#ffd04b">
+			<el-submenu index="1">
+				<template slot="title">
+					<el-avatar :src="avatar" :size="30"></el-avatar>
+					<span class="username am-margin-left-sm">{{username}}</span>
+				</template>
+				<el-menu-item>消息</el-menu-item>
+				<el-menu-item index="/user/info">设置</el-menu-item>
+				<el-menu-item>退出</el-menu-item>
+			</el-submenu>
+		</el-menu>
 	</div>
 </template>
 
@@ -24,14 +25,14 @@
 	export default {
 		data() {
 			return {
-
+				activeIndex: '1',
 			}
 		},
 		created() {
 			this.getUserInfo();
 		},
 		computed: {
-			...mapGetters('User', ['nickname', 'avatar'])
+			...mapGetters('User', ['username', 'avatar'])
 		},
 		methods: {
 			collapseHandle() {
@@ -39,14 +40,26 @@
 			},
 			getUserInfo() {
 				this.$store
-					.dispatch("User/LoadInfo", { uid: sessionStorage.uid })
+					.dispatch("User/LoadInfo", { id: sessionStorage.id })
 			}
 		}
 	}
 </script>
 
-<style scoped="scoped" lang="scss">
-	.el-dropdown {
-		color: white;
+<style lang="scss">
+	.nav-bar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.left {
+			display: flex;
+			align-items: center;
+
+			.logo {
+				height: 50px;
+			}
+		}
+
 	}
 </style>
