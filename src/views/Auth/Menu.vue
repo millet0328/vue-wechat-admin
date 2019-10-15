@@ -62,7 +62,7 @@
 					</li>
 				</ul>
 				<!-- 分页器 -->
-				<el-pagination background layout="->,prev, pager, next" :page-size="30" :total="iconTotal" @current-change="currentPageChange"></el-pagination>
+				<el-pagination background layout="->,prev, pager, next" :page-size="pageSize" :total="iconTotal" @current-change="currentPageChange"></el-pagination>
 
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="IconModalVisible = false">取 消</el-button>
@@ -104,6 +104,7 @@
 				// 选择图标
 				IconModalVisible: false,
 				icons: [],
+				pageSize: 30,
 				iconTotal: 0,
 				checkedIcon: '',
 				checkedIconName: '',
@@ -142,7 +143,7 @@
 			},
 			// 加载element图标
 			async loadIcons(pageIndex) {
-				let { status, icons, total } = await Icon.list({ pageSize: 30, pageIndex });
+				let { status, icons, total } = await Icon.list({ pageSize: this.pageSize, pageIndex });
 				if (status) {
 					icons.forEach((item) => {
 						// 添加选择状态--布尔值

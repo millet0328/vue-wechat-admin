@@ -46,7 +46,14 @@ axios.interceptors.response.use(function({ status, data, response }) {
 }, function(error) {
 	// 拦截401状态码
 	if (error.response.status == 401) {
-		Message.error("Token无效，请重新登录！");
+		let expiredTime = new Date(error.response.data.inner.expiredAt).toLocaleString();
+		Message.error({
+			message: `Token已过期,有效期至${expiredTime}，请重新登录！`,
+			onClose: () => {
+				router.replace('/login');
+				loading.close();
+			}
+		});
 	}
 	// 对响应错误做点什么
 	return Promise.reject(error);

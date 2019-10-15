@@ -4,6 +4,7 @@
 			<div slot="header" class="clearfix">
 				<span>商品列表</span>
 			</div>
+			<!-- 表格 -->
 			<el-table :data="tableData" style="width:100%">
 				<el-table-column fixed label="商品名称" width="550">
 					<template slot-scope="scope">
@@ -19,11 +20,11 @@
 						</div>
 					</template>
 				</el-table-column>
-				<el-table-column prop="price" label="价格">
+				<el-table-column sortable prop="price" label="价格">
 				</el-table-column>
-				<el-table-column prop="inventory" label="库存">
+				<el-table-column sortable prop="inventory" label="库存">
 				</el-table-column>
-				<el-table-column prop="create_time" label="发布时间">
+				<el-table-column sortable prop="create_time" label="发布时间">
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
@@ -34,6 +35,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
+			<!-- 分页器 -->
+			<el-pagination :page-sizes="[4,8,16,32]" :page-size="pageSize" :total="total" @size-change="pageSizeChange"
+			 @current-change="currentPageChange" background layout="->,prev,pager,next,sizes,total" class="am-margin-top-sm"></el-pagination>
 		</el-card>
 	</div>
 </template>
@@ -41,10 +45,12 @@
 	import { Goods } from '@/api/index';
 
 	export default {
-
 		data() {
 			return {
-				tableData: []
+				tableData: [],
+				total: 0,
+				pageSize: 4,
+				pageIndex: 1,
 			};
 		},
 		created() {
@@ -52,13 +58,24 @@
 		},
 		methods: {
 			async loadGoodsList() {
-				let { status, data } = await Goods.list({ pageSize: 100 });
+				let { status, goods, total } = await Goods.list({
+					pageIndex: this.pageIndex,
+					pageSize: this.pageSize,
+				});
 				if (status) {
-					data.forEach(function(item, index) {
-						item.create_time = new Date(item.create_time).toLocaleString()
-					});
-					this.tableData = data;
+					this.tableData = goods;
+					this.total = total;
 				}
+			},
+			// 分页器改变页码数
+			currentPageChange(pageIndex) {
+				this.pageIndex = pageIndex;
+				this.loadGoodsList();
+			},
+			// 分页器pageSize改变
+			pageSizeChange(size) {
+				this.pageSize = size;
+				this.loadGoodsList();
 			},
 			async showDeleteModal(id) {
 				this.$confirm('确定要删除该商品吗？删除之后无法恢复！！！', {
