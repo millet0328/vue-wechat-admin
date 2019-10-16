@@ -107,7 +107,7 @@
 				}
 			},
 			async loadRole() {
-				let { status, data } = await Role.load();
+				let { status, data } = await Role.list();
 				if (status) {
 					this.roles = data;
 				}
