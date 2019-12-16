@@ -47,7 +47,7 @@
 </template>
 <script>
 	import { Order } from '@/api/index';
-	
+
 	export default {
 		data() {
 			return {
@@ -55,16 +55,19 @@
 			};
 		},
 		created() {
-			Order.loadList({ status: 'all' }).then((res) => {
-				if (res.status) {
-					res.data.forEach(function(item) {
-						item.create_time = new Date(item.create_time).toLocaleString()
-					})
-					this.tableData = res.data;
-				}
-			});
+			this.loadList()
 		},
-		methods: {}
+		methods: {
+			async loadList() {
+				let { status, data } = await Order.loadList({ status: 'all' });
+				if (status) {
+					data.forEach(function(item) {
+						item.create_time = new Date(item.create_time).toLocaleString()
+					});
+					this.tableData = data;
+				}
+			}
+		}
 	};
 </script>
 <style lang="scss" scoped>

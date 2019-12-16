@@ -1,59 +1,35 @@
 import { User } from '@/api/index';
-const Login = ({ commit, state }, formData) => {
-	return new Promise((resolve, reject) => {
-		User.login(formData)
-			.then((res) => {
-				if (!res.status) {
-					reject(res);
-					return;
-				}
-				// 储存到state
-				commit('setUserInfo', res.data);
-				resolve(res);
-			})
-	});
+const Login = async ({ commit, state }, formData) => {
+	let { status, data } = await User.login(formData);
+	if (status) {
+		// 储存到state
+		commit('setUserInfo', data);
+	}
+	return data;
 };
-const Register = ({ commit, state }, formData) => {
-	return new Promise((resolve, reject) => {
-		User.register(formData)
-			.then((res) => {
-				if (!res.status) {
-					reject(res);
-					return;
-				}
-				// 储存到state
-				commit('setUserInfo', res.data);
-				resolve(res);
-			})
-	});
+const Register = async ({ commit, state }, formData) => {
+	let { status, data } = await User.register(formData);
+	if (status) {
+		// 储存到state
+		commit('setUserInfo', data);
+	}
+	return data;
 };
-const LoadInfo = ({ commit, state }, formData) => {
-	return new Promise((resolve, reject) => {
-		User.loadInfo(formData)
-			.then((res) => {
-				if (!res.status) {
-					reject(res);
-					return;
-				}
-				// 储存到state
-				commit('setUserInfo', res.data);
-				resolve(res);
-			})
-	});
+const LoadInfo = async ({ commit, state }, formData) => {
+	let { status, data } = await User.loadInfo(formData);
+	if (status) {
+		// 储存到state
+		commit('setUserInfo', data);
+	}
+	return data;
 };
-const Update = ({ commit, state }, formData) => {
-	return new Promise((resolve, reject) => {
-		User.update(formData)
-			.then((res) => {
-				if (!res.status) {
-					reject(res);
-					return;
-				}
-				// 储存到state
-				commit('setUserInfo', formData);
-				resolve(res);
-			})
-	});
+const Update = async ({ commit, state }, formData) => {
+	let { status, data } = await User.update(formData);
+	if (status) {
+		// 储存到state
+		commit('setUserInfo', data);
+	}
+	return data;
 };
 export default {
 	Login,
