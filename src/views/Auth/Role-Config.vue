@@ -33,6 +33,7 @@
 		},
 		created() {
 			this.loadRoleConfig();
+			document.title = "角色菜单设置";
 		},
 		watch: {
 			// 如果路由有变化，会再次执行该方法

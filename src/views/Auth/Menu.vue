@@ -130,6 +130,7 @@
 		},
 		created() {
 			this.loadIcons(1);
+			document.title = "菜单权限";
 		},
 		methods: {
 			async loadNode(node, resolve) {

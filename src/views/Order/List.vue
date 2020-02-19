@@ -55,7 +55,8 @@
 			};
 		},
 		created() {
-			this.loadList()
+			this.loadList();
+			document.title = "订单列表";
 		},
 		methods: {
 			async loadList() {

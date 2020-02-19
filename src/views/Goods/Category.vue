@@ -86,6 +86,9 @@
 				currentNode: '',
 			}
 		},
+		created() {
+			document.title = "商品分类";
+		},
 		methods: {
 			async loadNode(node, resolve) {
 				// 根节点level==0

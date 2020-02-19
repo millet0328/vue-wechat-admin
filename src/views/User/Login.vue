@@ -44,6 +44,9 @@
 				}
 			}
 		},
+		created() {
+			document.title = "登录";
+		},
 		methods: {
 			loginHandle() {
 				// 提取数据
@@ -70,9 +73,6 @@
 									}
 								});
 							})
-							.catch(({ msg }) => {
-								this.$message.error(msg);
-							});
 					}
 				});
 			},

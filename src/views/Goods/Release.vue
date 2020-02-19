@@ -216,6 +216,7 @@
 		},
 		created() {
 			this.cateChangeHandle(1, 'cate_1st');
+			document.title = "发布新商品";
 		},
 		watch: {
 			'form.cate_1st'(newValue, oldValue) {

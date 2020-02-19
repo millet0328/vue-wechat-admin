@@ -1,19 +1,21 @@
 import { User } from '@/api/index';
 const Login = async ({ commit, state }, formData) => {
-	let { status, data } = await User.login(formData);
+	let res = await User.login(formData);
+	let { status, data } = res;
 	if (status) {
 		// 储存到state
 		commit('setUserInfo', data);
 	}
-	return data;
+	return res;
 };
 const Register = async ({ commit, state }, formData) => {
-	let { status, data } = await User.register(formData);
+	let res = await User.register(formData);
+	let { status, data } = res;
 	if (status) {
 		// 储存到state
 		commit('setUserInfo', data);
 	}
-	return data;
+	return res;
 };
 const LoadInfo = async ({ commit, state }, formData) => {
 	let { status, data } = await User.loadInfo(formData);
@@ -24,12 +26,13 @@ const LoadInfo = async ({ commit, state }, formData) => {
 	return data;
 };
 const Update = async ({ commit, state }, formData) => {
-	let { status, data } = await User.update(formData);
+	let res = await User.update(formData);
+	let { status, data } = res;
 	if (status) {
 		// 储存到state
 		commit('setUserInfo', data);
 	}
-	return data;
+	return res;
 };
 export default {
 	Login,

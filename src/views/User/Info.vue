@@ -53,6 +53,7 @@
 			this.loadRole();
 			// 双向数据绑定，vuex中的state不适合用计算属性
 			this.form = { ...this.$store.state.User.userInfo };
+			document.title = "账户信息";
 		},
 		methods: {
 			async loadRole() {

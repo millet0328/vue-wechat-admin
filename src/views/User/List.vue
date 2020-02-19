@@ -98,6 +98,7 @@
 		created() {
 			this.loadList();
 			this.loadRole();
+			document.title = "用户列表";
 		},
 		methods: {
 			async loadList() {

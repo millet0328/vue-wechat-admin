@@ -206,6 +206,9 @@
 				}
 			}
 		},
+		created() {
+			document.title = "商品编辑";
+		},
 		async mounted() {
 			// 获取参数对应的数据
 			let data = await this.getDetail();

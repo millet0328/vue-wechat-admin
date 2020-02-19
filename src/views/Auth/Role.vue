@@ -81,6 +81,7 @@
 		},
 		created() {
 			this.loadRole();
+			document.title = "用户角色";
 		},
 		methods: {
 			async loadRole() {

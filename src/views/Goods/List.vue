@@ -55,6 +55,7 @@
 		},
 		created() {
 			this.loadGoodsList();
+			document.title = "商品列表";
 		},
 		methods: {
 			async loadGoodsList() {

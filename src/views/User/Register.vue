@@ -73,6 +73,9 @@
 				}
 			}
 		},
+		created() {
+			document.title = "注册";
+		},
 		methods: {
 			registerHandle() {
 				// 1.表单验证
