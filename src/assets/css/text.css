@@ -1,0 +1,71 @@
+/*文字*/
+
+.am-text-default {
+	font-size: 16px;
+}
+
+.am-text-xs {
+	font-size: 12px;
+}
+
+.am-text-sm {
+	font-size: 14px;
+}
+
+.am-text-lg {
+	font-size: 18px;
+}
+
+.am-text-xl {
+	font-size: 24px;
+}
+
+.am-text-xxl {
+	font-size: 32px;
+}
+
+.am-text-xxxl {
+	font-size: 42px;
+}
+
+.am-ellipsis,
+.am-text-truncate {
+	word-wrap: normal;
+	/* for IE */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.am-text-break {
+	word-wrap: break-word;
+	-webkit-hyphens: auto;
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}
+
+.am-text-nowrap {
+	white-space: nowrap;
+}
+
+.am-text-top {
+	vertical-align: top !important;
+}
+
+.am-text-middle {
+	vertical-align: middle !important;
+}
+
+.am-text-bottom {
+	vertical-align: bottom !important;
+}
+
+.am-text-right {
+	text-align: right;
+}
+
+.am-text-left {
+	text-align: left;
+}
+

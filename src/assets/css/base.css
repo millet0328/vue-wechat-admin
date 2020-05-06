@@ -1,0 +1,32 @@
+@import url("./margin.css");
+@import url("./padding.css");
+@import url("./text.css");
+
+/*辅助类样式*/
+html,
+body {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #666666;
+}
+
+.relative {
+	position: relative;
+}
+
+.am-block {
+	display: block;
+}
+
+.am-img-responsive {
+	display: block;
+	max-width: 100%;
+	height: auto
+}
+
+.am-circle {
+	border-radius: 50%
+}
