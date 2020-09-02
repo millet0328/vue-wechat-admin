@@ -18,7 +18,7 @@ const Register = async ({ commit, state }, formData) => {
 	return res;
 };
 const LoadInfo = async ({ commit, state }, formData) => {
-	let { status, data } = await User.loadInfo(formData);
+	let { status, data } = await User.info(formData);
 	if (status) {
 		// 储存到state
 		commit('setUserInfo', data);

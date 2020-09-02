@@ -38,6 +38,9 @@
 					<el-form-item label="菜单名称">
 						<el-input v-model="editForm.name"></el-input>
 					</el-form-item>
+					<el-form-item label="组件名称">
+						<el-input v-model="editForm.component" placeholder="指定此菜单对应的组件名称"></el-input>
+					</el-form-item>
 					<el-form-item label="链接地址">
 						<el-input v-model="editForm.path" placeholder="指定此菜单的链接地址，选填"></el-input>
 					</el-form-item>
@@ -74,6 +77,9 @@
 				<el-form label-width="80px" :label-position="'left'">
 					<el-form-item label="菜单名称">
 						<el-input v-model="addForm.name"></el-input>
+					</el-form-item>
+					<el-form-item label="组件名称">
+						<el-input v-model="addForm.component" placeholder="指定此菜单对应的组件名称"></el-input>
 					</el-form-item>
 					<el-form-item label="链接地址">
 						<el-input v-model="addForm.path" placeholder="指定此菜单的链接地址，选填"></el-input>
@@ -113,6 +119,7 @@
 				editForm: {
 					name: "",
 					pId: '',
+					component:"",
 					path: '',
 					order: '',
 				},
@@ -121,6 +128,7 @@
 				addForm: {
 					name: "",
 					pId: '',
+					component:"",
 					path: '',
 					order: '',
 				},

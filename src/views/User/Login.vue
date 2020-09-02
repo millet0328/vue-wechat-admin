@@ -4,7 +4,7 @@
 			<div slot="header">
 				<span>欢迎登录</span>
 			</div>
-			<el-form ref="form" :rules="rules" size="medium" :model="form" label-width="60px">
+			<el-form @keyup.enter.native="handleLogin" ref="form" :rules="rules" size="medium" :model="form" label-width="60px">
 				<el-form-item label="账户" prop="username">
 					<el-input placeholder="请输入账户名!" prefix-icon="el-icon-user" v-model="form.username"></el-input>
 				</el-form-item>
@@ -12,7 +12,7 @@
 					<el-input placeholder="请输入密码!" prefix-icon="el-icon-key" type="password" v-model="form.password"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="loginHandle">登录</el-button>
+					<el-button type="primary" @click="handleLogin">登录</el-button>
 				</el-form-item>
 			</el-form>
 			<div class="link-box">
@@ -29,8 +29,8 @@
 		data() {
 			return {
 				form: {
-					username: "",
-					password: "",
+					username: "admin",
+					password: "123456",
 				},
 				rules: {
 					username: [
@@ -48,30 +48,34 @@
 			document.title = "登录";
 		},
 		methods: {
-			loginHandle() {
+			handleLogin() {
 				// 提取数据
 				this.$refs.form.validate(async (valid) => {
 					if (valid) {
 						this.$store
 							.dispatch('User/Login', { ...this.form })
-							.then(({ data, msg }) => {
-								// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-								sessionStorage.token = data.token;
-								sessionStorage.role = data.role;
-								sessionStorage.id = data.id;
-								// 跳转页面
-								this.$message({
-									message: msg,
-									type: 'success',
-									duration: 1000,
-									onClose: () => {
-										if (this.redirect) {
-											this.$router.replace(this.redirect);
-											return;
+							.then(({ data, msg, status }) => {
+								if (status) {
+									// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
+									sessionStorage.token = data.token;
+									sessionStorage.role = data.role;
+									sessionStorage.id = data.id;
+									// 跳转页面
+									this.$message({
+										message: msg,
+										type: 'success',
+										duration: 1000,
+										onClose: () => {
+											if (this.redirect) {
+												this.$router.replace(this.redirect);
+												return;
+											}
+											this.$router.push('/goods')
 										}
-										this.$router.push('/goods')
-									}
-								});
+									});
+								} else {
+									this.$message.error(msg);
+								}
 							})
 					}
 				});

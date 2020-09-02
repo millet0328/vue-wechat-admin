@@ -4,7 +4,9 @@
 			<HeaderBar></HeaderBar>
 		</el-header>
 		<el-container>
-			<LeftMenu></LeftMenu>
+			<el-aside width="auto">
+				<LeftMenu></LeftMenu>
+			</el-aside>
 			<el-main>
 				<router-view></router-view>
 			</el-main>
@@ -26,7 +28,7 @@
 	.container {
 		width: 100%;
 		min-height: 100vh;
-		background-color: #545C64;
+		background-color: #334e66;
 		color: white;
 
 		.el-header {

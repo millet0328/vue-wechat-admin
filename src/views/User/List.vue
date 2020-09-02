@@ -9,7 +9,7 @@
 				</el-table-column>
 				<el-table-column sortable label="头像">
 					<template slot-scope="scope">
-						<img :src="scope.row.avatar" class="avatar" width="60" alt="">
+						<el-avatar :src="scope.row.avatar" :size="50"></el-avatar>
 					</template>
 				</el-table-column>
 				<el-table-column prop="username" sortable label="账号">
@@ -39,26 +39,26 @@
 			</el-table>
 		</el-card>
 		<!--编辑数据-->
-		<el-dialog title="修改信息" :visible.sync="editModalShow">
-			<el-form :model="form" label-position="left" label-width="80px">
-				<el-form-item label="姓名">
+		<el-dialog title="修改信息" :visible.sync="editModalShow" @closed="handleCloseDialog('form')">
+			<el-form ref="form" :model="form" :rules="rules" label-position="left" label-width="80px">
+				<el-form-item label="姓名" prop="fullname">
 					<el-input v-model="form.fullname" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
+				<el-form-item label="性别" prop="sex">
 					<el-radio-group v-model="form.sex">
 						<el-radio label="男">男</el-radio>
 						<el-radio label="女">女</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="手机">
-					<el-input v-model.number="form.tel" auto-complete="off"></el-input>
+				<el-form-item label="手机" prop="tel">
+					<el-input v-model="form.tel" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="权限">
+				<el-form-item label="权限" prop="role">
 					<el-select v-model="form.role" placeholder="请选择账户">
 						<el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="头像">
+				<el-form-item label="头像" prop="avatar">
 					<single-upload default-image="/images/avatar/default.jpg" action="/api/upload/avatar/" :url.sync="form.avatar" />
 				</el-form-item>
 			</el-form>
@@ -72,7 +72,7 @@
 
 <script>
 	//引入service模块
-	import { User, Role } from '@/api/index'
+	import { Admin, Role } from '@/api/index'
 	import SingleUpload from '@/components/SingleUpload.vue';
 
 	export default {
@@ -81,18 +81,38 @@
 			SingleUpload,
 		},
 		data() {
+
 			return {
 				tableData: [],
 				roles: [],
 				editModalShow: false,
 				form: {
 					id: "",
-					nickname: "",
+					fullname: "",
 					sex: "男",
 					tel: "",
 					role: "",
 					avatar: "",
 				},
+				rules: {
+					fullname: [
+						{ required: true, type: 'string', message: '请输入真实姓名！', trigger: 'blur' },
+						{ pattern: /^[\u4E00-\u9FA5A-Za-z\s]+(·[\u4E00-\u9FA5A-Za-z]+)*$/, message: '请输入有效的姓名', trigger: 'blur' }
+					],
+					sex: [
+						{ required: true, message: '请选择性别！', trigger: 'blur' },
+					],
+					tel: [
+						{ required: true, message: '请输入手机号码！', trigger: 'blur' },
+						{ pattern: /^1(3|4|5|6|7|8|9)\d{9}$/, message: '请输入有效的手机号码', trigger: 'blur' }
+					],
+					role: [
+						{ required: true, message: '请选择账户角色！', trigger: 'blur' },
+					],
+					avatar: [
+						{ required: true, message: '请上传一张头像！', trigger: 'click' },
+					],
+				}
 			};
 		},
 		created() {
@@ -102,7 +122,7 @@
 		},
 		methods: {
 			async loadList() {
-				let { status, data } = await User.list();
+				let { status, data } = await Admin.list();
 				if (status) {
 					this.tableData = data;
 				}
@@ -113,16 +133,16 @@
 					this.roles = data;
 				}
 			},
+			// 显示编辑框
 			showEditModal(row) {
 				this.editModalShow = true;
 				this.form = { ...row };
 			},
+			// 删除账户
 			showDeleteModal(id) {
-				this.$confirm('此操作将永久删除该账户, 是否继续?', {
-						type: 'warning'
-					})
+				this.$confirm('此操作将永久删除该账户, 是否继续?', { type: 'warning' })
 					.then(async () => {
-						let { status, msg } = await User.remove({ id });
+						let { status, msg } = await Admin.remove({ id });
 						if (status) {
 							this.$message.success('删除成功！');
 							this.loadList();
@@ -133,20 +153,25 @@
 					});
 			},
 			// 修改账户信息
-			async updateInfo() {
-				let { status, msg } = await User.update({ ...this.form });
-				if (status) {
-					this.editModalShow = false;
-					this.$message.success(msg);
-					this.loadList();
-				}
+			updateInfo() {
+				this.$refs.form.validate(async (valid) => {
+					if (!valid) { return false };
+					let { status, msg } = await Admin.update({ ...this.form });
+					if (status) {
+						this.editModalShow = false;
+						this.$message.success(msg);
+						this.loadList();
+					}
+				})
+			},
+			// 关闭dialog弹窗，清除之前的验证提示
+			handleCloseDialog(formName) {
+				this.$refs[formName].clearValidate();
 			},
 		}
 	};
 </script>
 
 <style scoped>
-	.cell .avatar {
-		border-radius: 50%;
-	}
+
 </style>

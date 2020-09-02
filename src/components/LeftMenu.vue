@@ -1,7 +1,7 @@
 <template>
 	<el-menu :collapse="isCollapse" :default-openeds="['0']" background-color="#334e66" router text-color="#fff"
 	 active-text-color="#ffd04b">
-		<el-submenu v-for="(item,index) in menuTree" :key="item.id" :index="index.toString()">
+		<el-submenu v-for="(item,index) in tree" :key="item.id" :index="index.toString()">
 			<template slot="title">
 				<i :class="`el-icon-${item.icon}`"></i>
 				<span slot="title">{{item.name}}</span>
@@ -19,13 +19,8 @@
 
 	export default {
 		computed: {
-			...mapState({
-				isCollapse: state => state.Menu.isCollapse,
-				menuTree: state => state.Menu.tree,
-			}),
-			...mapGetters({
-				role: 'User/role',
-			})
+			...mapState('Menu', ['isCollapse', 'tree']),
+			...mapGetters('User', ['role'])
 		},
 		created() {
 			this.loadMenuTree();
@@ -38,5 +33,8 @@
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+	.el-menu {
+		border-right: 0;
+	}
 </style>

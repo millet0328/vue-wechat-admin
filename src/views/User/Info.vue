@@ -4,28 +4,23 @@
 			<div slot="header" class="clearfix">
 				<span>账户信息</span>
 			</div>
-			<el-form :model="form" label-position="left" label-width="100px">
-				<el-form-item label="账户">
+			<el-form ref="form" :model="form" :rules="rules" label-position="left" label-width="100px">
+				<el-form-item label="账户" prop="username">
 					<el-input v-model="form.username" disabled auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="姓名">
+				<el-form-item label="姓名" prop="fullname">
 					<el-input v-model="form.fullname" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
+				<el-form-item label="性别" prop="sex">
 					<el-radio-group v-model="form.sex">
 						<el-radio label="男">男</el-radio>
 						<el-radio label="女">女</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="手机">
+				<el-form-item label="手机" prop="tel">
 					<el-input v-model.number="form.tel" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="权限">
-					<el-select v-model="form.role" placeholder="请选择账户">
-						<el-option v-for="item in roles" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="头像">
+				<el-form-item label="头像" prop="avatar">
 					<single-upload default-image="/images/avatar/default.jpg" action="/api/upload/avatar/" :url.sync="form.avatar" />
 				</el-form-item>
 				<el-button type="primary" @click="updateInfo">修 改</el-button>
@@ -46,31 +41,50 @@
 		data() {
 			return {
 				roles: [],
-				form: {}
+				form: {
+					username: "",
+					fullname: "",
+					sex: "男",
+					tel: "",
+					role: "",
+					avatar: "",
+				},
+				rules: {
+					fullname: [
+						{ required: true, type: 'string', message: '请输入真实姓名！', trigger: 'blur' },
+						{ pattern: /^[\u4E00-\u9FA5A-Za-z\s]+(·[\u4E00-\u9FA5A-Za-z]+)*$/, message: '请输入有效的姓名', trigger: 'blur' }
+					],
+					sex: [
+						{ required: true, message: '请选择性别！', trigger: 'blur' },
+					],
+					tel: [
+						{ required: true, message: '请输入手机号码！', trigger: 'blur' },
+						{ pattern: /^1(3|4|5|6|7|8|9)\d{9}$/, message: '请输入有效的手机号码', trigger: 'blur' }
+					],
+					avatar: [
+						{ required: true, message: '请上传一张头像！', trigger: 'click' },
+					],
+				}
 			};
 		},
 		created() {
-			this.loadRole();
 			// 双向数据绑定，vuex中的state不适合用计算属性
 			this.form = { ...this.$store.state.User.userInfo };
 			document.title = "账户信息";
 		},
 		methods: {
-			async loadRole() {
-				let { status, data } = await Role.list();
-				if (status) {
-					this.roles = data;
-				}
-			},
 			// 修改账户信息
 			updateInfo() {
-				let { role } = this.form;
-				this.$store.dispatch('User/Update', { ...this.form }).then((res) => {
-					if (res.status) {
-						sessionStorage.role = role;
-						this.$message.success(res.msg);
-					}
-				})
+				this.$refs.form.validate((valid) => {
+					if (!valid) { return false };
+					let { role } = this.form;
+					this.$store.dispatch('User/Update', { ...this.form }).then(({ status, msg }) => {
+						if (status) {
+							sessionStorage.role = role;
+							this.$message.success(msg);
+						}
+					})
+				});
 			},
 		}
 	}

@@ -2,7 +2,7 @@
 	<div class="nav-bar">
 		<div class="left">
 			<img class="logo am-margin-right-sm" src="../assets/img/common/logo.png">
-			<i @click="collapseHandle" class="el-icon-s-fold"></i>
+			<i @click="handleCollapse" class="el-icon-s-fold"></i>
 		</div>
 		<el-menu mode="horizontal" router :default-active="activeIndex" background-color="#31404e" text-color="#fff"
 		 active-text-color="#ffd04b">
@@ -13,7 +13,7 @@
 				</template>
 				<el-menu-item>消息</el-menu-item>
 				<el-menu-item index="/user/info">设置</el-menu-item>
-				<el-menu-item>退出</el-menu-item>
+				<el-menu-item @click="handleLogout">退出</el-menu-item>
 			</el-submenu>
 		</el-menu>
 	</div>
@@ -35,12 +35,15 @@
 			...mapGetters('User', ['username', 'avatar'])
 		},
 		methods: {
-			collapseHandle() {
+			handleCollapse() {
 				this.$store.commit("Menu/ToggleMenu");
 			},
 			getUserInfo() {
-				this.$store
-					.dispatch("User/LoadInfo", { id: sessionStorage.id })
+				this.$store.dispatch("User/LoadInfo", { id: sessionStorage.id })
+			},
+			handleLogout(){
+				sessionStorage.clear();
+				this.$router.replace('/login');
 			}
 		}
 	}

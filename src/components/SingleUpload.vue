@@ -75,7 +75,7 @@
 			async removeImage() {
 				// 如果不是默认头像，物理删除图片
 				if (this.url != this.defaultImage) {
-					let { status } = await Upload.remove({ src: '.' + this.url });
+					let { status } = await Upload.remove({ src: this.url });
 					if (status) {
 						this.$message.success('删除成功!');
 					}
@@ -102,9 +102,9 @@
 		.avatar-uploader-icon {
 			font-size: 28px;
 			color: #8c939d;
-			width: 178px;
-			height: 178px;
-			line-height: 178px;
+			width: 150px;
+			height: 150px;
+			line-height: 150px;
 			text-align: center;
 		}
 
@@ -132,8 +132,8 @@
 		}
 
 		.avatar {
-			width: 178px;
-			height: 178px;
+			width: 150px;
+			height: 150px;
 			display: block;
 		}
 	}

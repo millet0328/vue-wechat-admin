@@ -1,4 +1,5 @@
 import { Menu } from '@/api/index';
+
 const LoadTree = async ({ commit, state }, formData) => {
 	let { status, data } = await Menu.loadTree(formData);
 	if (status) {

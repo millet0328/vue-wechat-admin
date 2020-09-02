@@ -84,22 +84,24 @@
 						// 2.提取数据
 						this.$store
 							.dispatch('User/Register', { ...this.form })
-							.then(({ msg, data }) => {
+							.then(({ msg, data, status }) => {
 								// 储存token,uid,role (1-超级管理员，2-管理员，3-运营管理)
-								sessionStorage.token = data.token;
-								sessionStorage.role = data.role;
-								// 跳转页面
-								this.$message({
-									message: msg,
-									type: 'success',
-									duration: 1000,
-									onClose: () => {
-										this.$router.push('/goods')
-									}
-								});
-							})
-							.catch(({ msg }) => {
-								this.$message.error(msg);
+								if (status) {
+									sessionStorage.token = data.token;
+									sessionStorage.role = data.role;
+									sessionStorage.id = data.id;
+									// 跳转页面
+									this.$message({
+										message: msg,
+										type: 'success',
+										duration: 1000,
+										onClose: () => {
+											this.$router.push('/goods')
+										}
+									});
+								} else {
+									this.$message.error(msg);
+								}
 							})
 					}
 				});

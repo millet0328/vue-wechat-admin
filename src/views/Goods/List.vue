@@ -9,7 +9,7 @@
 				<el-table-column fixed label="商品名称" width="550">
 					<template slot-scope="scope">
 						<div class="goods">
-							<div class="img">
+							<div class="photo">
 								<img :src="scope.row.img_md" />
 							</div>
 							<div class="name">
@@ -101,12 +101,12 @@
 		display: flex;
 		align-items: center;
 
-		.img {
+		.photo {
 			margin-right: 6px;
 			border: 1px solid #eee;
 		}
 
-		.img img {
+		.photo img {
 			width: 80px;
 			display: block;
 		}

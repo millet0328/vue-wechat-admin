@@ -1,22 +1,16 @@
 import axios from 'axios';
-
+// 登录
 const login = (formData) => axios.post('/api/admin/login', formData);
-
+// 注册
 const register = (formData) => axios.post('/api/admin/register', formData);
-
-const loadInfo = (formData) => axios.get('/api/admin', { params: formData });
-
-const list = (formData) => axios.get('/api/admin/list', { params: formData });
-
-const update = (formData) => axios.put('/api/admin', formData);
-
-const remove = (formData) => axios.delete('/api/admin', { params: formData });
+// 获取账户详情
+const info = (formData) => axios.get('/api/admin', { params: formData });
+// 修改本账户信息
+const update = (formData) => axios.put('/api/admin/account', formData);
 
 export default {
 	login,
 	register,
-	loadInfo,
-	list,
+	info,
 	update,
-	remove
 }
