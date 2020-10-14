@@ -21,7 +21,7 @@
 					<el-input v-model.number="form.tel" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="头像" prop="avatar">
-					<single-upload default-image="/images/avatar/default.jpg" action="/api/upload/avatar/" :url.sync="form.avatar" />
+					<single-upload default-image="/images/avatar/default.jpg" :data="{type:'avatar'}" action="/api/upload/common/" :url.sync="form.avatar" />
 				</el-form-item>
 				<el-button type="primary" @click="updateInfo">修 改</el-button>
 			</el-form>

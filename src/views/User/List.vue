@@ -59,7 +59,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="头像" prop="avatar">
-					<single-upload default-image="/images/avatar/default.jpg" action="/api/upload/avatar/" :url.sync="form.avatar" />
+					<single-upload default-image="/images/avatar/default.jpg" :data="{type:'avatar'}" action="/api/upload/common/" :url.sync="form.avatar" />
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">

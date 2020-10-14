@@ -7,8 +7,8 @@ import { Loading, Message } from 'element-ui';
 import router from '@/router';
 
 let loading;
-// 设置baseURL，自动将api地址前面拼接，${baseURL}/api/path
-axios.defaults.baseURL = 'http://localhost:3003/';
+// 应对跨域请求，设置baseURL，自动将api地址前面拼接，${baseURL}/api/path
+// axios.defaults.baseURL = 'http://localhost:3003/';
 // 添加请求拦截器
 axios.interceptors.request.use(function(config) {
 	// 在发送请求之前做些什么

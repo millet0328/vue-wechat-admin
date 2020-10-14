@@ -29,7 +29,7 @@
 					<el-input v-model="editForm.name" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片" prop="img">
-					<single-upload action="/api/upload/common/" :url.sync="editForm.img" />
+					<single-upload :data="{type:'common'}" action="/api/upload/common/" :url.sync="editForm.img" />
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -44,7 +44,7 @@
 					<el-input v-model="addForm.name" autocomplete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片" prop="img">
-					<single-upload action="/api/upload/common/" :url.sync="addForm.img" />
+					<single-upload :data="{type:'common'}" action="/api/upload/common/" :url.sync="addForm.img" />
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -173,13 +173,13 @@
 			},
 			// 校验图片是否为空
 			checkImage() {
-				return Promise.resolve(true)
+				return Promise.resolve(true);
 				return new Promise((resolve, reject) => {
 					this.$refs.editForm.validateField('img', (msg) => {
 						if (msg) {
-							resolve(false);
-						} else {
 							resolve(true);
+						} else {
+							resolve(false);
 						}
 					});
 				});

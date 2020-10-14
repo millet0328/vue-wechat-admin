@@ -1,5 +1,5 @@
 <template>
-	<el-upload class="avatar-uploader" :action="action" :headers="headers" :show-file-list="false" :on-success="uploadSuccess"
+	<el-upload class="avatar-uploader" :action="action" :headers="headers" :data="data" :show-file-list="false" :on-success="uploadSuccess"
 	 :on-error="uploadError" :before-upload="beforeUpload">
 		<div v-if="url" @click.stop="removeImage" class="cover">
 			<i class="el-icon-delete avatar-uploader-icon"></i>
@@ -26,6 +26,9 @@
 			action: {
 				type: String,
 				required: true
+			},
+			data: {
+				type: Object,
 			},
 		},
 		data() {
