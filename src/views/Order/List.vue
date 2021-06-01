@@ -60,7 +60,7 @@
 		},
 		methods: {
 			async loadList() {
-				let { status, data } = await Order.loadList({ status: 'all' });
+				let { status, data } = await Order.loadList({ status: 'all', pageSize: 200, pageIndex: 1 });
 				if (status) {
 					data.forEach(function(item) {
 						item.create_time = new Date(item.create_time).toLocaleString()
