@@ -1,19 +1,19 @@
 import axios from 'axios';
-
+//发布商品
 const release = (formData) => axios.post('/api/admin/goods', formData);
-
-const remove = (formData) => axios.delete('/api/admin/goods', { params: formData });
-
-const update = (formData) => axios.put('/api/admin/goods', formData);
-
-const list = (formData) => axios.get('/api/admin/goods/list', { params: formData });
-
-const getDetail = (formData) => axios.get('/api/admin/goods', { params: formData });
+//删除商品
+const remove = (id, params) => axios.delete(`/api/admin/goods/${id}`, { params });
+//编辑商品
+const update = (id, formData) => axios.put(`/api/admin/goods/${id}`, formData);
+//商品列表
+const list = (params) => axios.get('/api/admin/goods/list', { params });
+//商品详情
+const detail = (params) => axios.get('/api/admin/goods', { params });
 
 export default {
-	release,
-	remove,
-	update,
-	list,
-	getDetail,
+    release,
+    remove,
+    update,
+    list,
+    detail,
 }

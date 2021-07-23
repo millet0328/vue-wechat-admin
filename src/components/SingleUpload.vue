@@ -103,7 +103,7 @@
 		}
 
 		.avatar-uploader-icon {
-			font-size: 28px;
+			font-size: 20px;
 			color: #8c939d;
 			width: 150px;
 			height: 150px;

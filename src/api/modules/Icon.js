@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const list = (formData) => axios.get('/api/admin/icon/list', { params: formData });
+const list = (params) => axios.get('/api/admin/icon/list', { params });
 
 export default {
-	list,
+    list,
 }

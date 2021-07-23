@@ -1,9 +1,9 @@
-const role = (state) => state.userInfo.role;
-const username = (state) => state.userInfo.username;
-const avatar = (state) => state.userInfo.avatar;
+const role = (state) => state.profile.role;
+const fullname = (state) => state.profile.fullname;
+const avatar = (state) => state.profile.avatar;
 
 export default {
 	role,
-	username,
+	fullname,
 	avatar,
 }

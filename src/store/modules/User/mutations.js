@@ -1,6 +1,6 @@
-const setUserInfo = (state, user) => {
-	state.userInfo = user;
+const SetProfile = (state, user) => {
+	state.profile = user;
 };
 export default {
-	setUserInfo,
+	SetProfile,
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const loadList = (formData) => axios.get('/api/admin/order/list', { params: formData });
+const loadList = (params) => axios.get('/api/admin/order/list', { params });
 
 export default {
-	loadList,
+    loadList,
 }

@@ -115,8 +115,7 @@
           </el-col>
         </el-form-item>
         <el-form-item prop="detail" label="商品描述">
-          <div ref="toolbar" class="w-e-toolbar"></div>
-          <div ref="editor" class="w-e-text-container"></div>
+          <div id="editor"></div>
         </el-form-item>
         <div class="section-title">商品物流信息</div>
         <el-row>
@@ -170,7 +169,7 @@
 </template>
 <script>
 import { Category, Goods, PCCT } from "@/api/index";
-import E from "wangeditor";
+import wangEditor from "wangeditor";
 
 import MainPhotoUpload from "@/components/MainPhotoUpload.vue";
 import SliderUpload from "@/components/SliderUpload";
@@ -303,17 +302,17 @@ export default {
     }
   },
   mounted() {
-    const editor = new E(this.$refs.toolbar, this.$refs.editor);
-    editor.customConfig.zIndex = 100;
-    //配置上传图片
-    editor.customConfig.uploadImgServer = "/api/upload/editor/";
-    editor.customConfig.uploadFileName = "file";
+    const editor = new wangEditor("#editor");
+    editor.config.zIndex = 100;
+    //配置上传图片`
+    editor.config.uploadImgServer = "/api/upload/editor/";
+    editor.config.uploadFileName = "file";
     // 配置header信息
-    editor.customConfig.uploadImgHeaders = {
+    editor.config.uploadImgHeaders = {
       Authorization: `Bearer ${sessionStorage.token}`
     };
     //同步HTML代码至data
-    editor.customConfig.onchange = html => {
+    editor.config.onchange = html => {
       this.form.detail = html;
     };
     editor.create();
@@ -434,16 +433,5 @@ export default {
 
 .el-upload img {
   max-width: 100%;
-}
-
-.w-e-toolbar {
-  border: 1px solid #ccc;
-  border-bottom: 0;
-}
-
-.w-e-text-container {
-  border: 1px solid #ccc;
-  min-height: 1000px;
-  height: 1000px;
 }
 </style>

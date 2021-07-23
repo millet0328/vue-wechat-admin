@@ -16,7 +16,7 @@
 // 支持双向数据绑定，采用:url.sync
 // 支持$emit事件success,处理复杂上传成功回调函数
 
-import {Upload} from '@/api/index';
+import { Upload } from '@/api/index';
 
 export default {
   name: "MainPhotoUpload",
@@ -61,8 +61,8 @@ export default {
     // 删除图片
     async handleRemove() {
       // 删除图片
-      let {status: statusMd} = await Upload.remove({src: this.url});
-      let {status: statusLg} = await Upload.remove({src: this.lgImg});
+      let { status: statusMd } = await Upload.remove({ src: this.url });
+      let { status: statusLg } = await Upload.remove({ src: this.lgImg });
       if (statusMd && statusLg) {
         this.$message.success('删除成功!');
         this.$emit("update:url", "");
@@ -71,7 +71,7 @@ export default {
     },
     // 上传图片成功
     handleUploadSuccess(res, file) {
-      let {status, mdImg, lgImg} = res;
+      let { status, mdImg, lgImg } = res;
       this.$message.success('上传成功!');
       // 触发外部绑定的事件
       this.$emit('success', res);
@@ -80,8 +80,8 @@ export default {
       this.$emit("update:lgImg", lgImg);
     },
     // 上传图片失败
-    handleUploadError({status, message}, file, fileList) {
-      let {msg} = JSON.parse(message);
+    handleUploadError({ status, message }, file, fileList) {
+      let { msg } = JSON.parse(message);
       switch (status) {
         case 401:
           this.$message.error(`错误:401,Token失效,请重新登录!`);
@@ -111,7 +111,7 @@ export default {
   }
 
   .avatar-uploader-icon {
-    font-size: 28px;
+    font-size: 20px;
     color: #8c939d;
     width: 150px;
     height: 150px;

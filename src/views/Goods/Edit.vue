@@ -8,7 +8,7 @@
         <el-row>
           <el-col :span="5">
             <el-form-item prop="cate_1st" label="商品分类">
-              <el-select v-model="form.cate_1st" @change="cate_1st_handle" placeholder="请选择一级分类">
+              <el-select v-model="form.cate_1st" @change="handleCate_1st" placeholder="请选择一级分类">
                 <el-option v-for="item in cate_1st_options" :key="item.id" :label="item.name"
                            :value="item.id"></el-option>
               </el-select>
@@ -16,7 +16,7 @@
           </el-col>
           <el-col :span="5">
             <el-form-item prop="cate_2nd">
-              <el-select v-model="form.cate_2nd" @change="cate_2nd_handle" placeholder="请选择二级分类">
+              <el-select v-model="form.cate_2nd" @change="handleCate_2nd" placeholder="请选择二级分类">
                 <el-option v-for="item in cate_2nd_options" :key="item.id" :label="item.name"
                            :value="item.id"></el-option>
               </el-select>
@@ -117,8 +117,7 @@
           </el-col>
         </el-form-item>
         <el-form-item prop="detail" label="商品描述">
-          <div ref="toolbar" class="w-e-toolbar"></div>
-          <div ref="editor" class="w-e-text-container"></div>
+          <div id="editor"></div>
         </el-form-item>
         <div class="section-title">商品物流信息</div>
         <el-row>
@@ -172,7 +171,7 @@
 </template>
 <script>
 import { Category, Goods, PCCT } from "@/api/index";
-import E from "wangeditor";
+import wangEditor from 'wangeditor';
 
 import MainPhotoUpload from "@/components/MainPhotoUpload.vue";
 import SliderUpload from "@/components/SliderUpload";
@@ -311,19 +310,19 @@ export default {
   },
   async mounted() {
     // 获取参数对应的数据
-    let data = await this.getDetail();
+    let data = await this.loadDetail();
     //富文本编辑器
-    const editor = new E(this.$refs.toolbar, this.$refs.editor);
-    editor.customConfig.zIndex = 100;
+    const editor = new wangEditor("#editor");
+    editor.config.zIndex = 100;
     //配置上传图片
-    editor.customConfig.uploadImgServer = "/api/upload/editor/";
-    editor.customConfig.uploadFileName = "file";
+    editor.config.uploadImgServer = "/api/upload/editor/";
+    editor.config.uploadFileName = "file";
     // 配置header信息
-    editor.customConfig.uploadImgHeaders = {
+    editor.config.uploadImgHeaders = {
       Authorization: `Bearer ${sessionStorage.token}`
     };
     //同步HTML代码至data
-    editor.customConfig.onchange = html => {
+    editor.config.onchange = html => {
       this.form.detail = html;
     };
     editor.create();
@@ -346,23 +345,23 @@ export default {
     this.loadProvince();
   },
   methods: {
-    async getDetail() {
-      let { status, data } = await Goods.getDetail({ id: this.id });
+    async loadDetail() {
+      let { status, data } = await Goods.detail({ id: this.id });
       if (status) {
         this.form = data;
         this.form.id = this.id;
-        return Promise.resolve(data);
+        return data;
       }
     },
     //分类change事件
-    cate_1st_handle(id) {
+    handleCate_1st(id) {
       this.handleCateChange(id, "cate_2nd");
     },
-    cate_2nd_handle(id) {
+    handleCate_2nd(id) {
       this.handleCateChange(id, "cate_3rd");
     },
     async handleCateChange(id, cate, setDefault = true) {
-      let data = await this.getOptions(id);
+      let data = await this.loadOptions(id);
       this[cate + "_options"] = data;
       //如果数组为空，下一级分类设置为空
       if (data.length === 0) {
@@ -375,10 +374,10 @@ export default {
       }
     },
     //获取下一级分类
-    async getOptions(id) {
+    async loadOptions(id) {
       let { status, data, msg } = await Category.load({ pId: id });
       if (status) {
-        return Promise.resolve(data);
+        return data;
       } else {
         this.$message.error(msg);
       }
@@ -421,7 +420,7 @@ export default {
     },
     //修改商品
     async handleEdit() {
-      let { status } = await Goods.update(this.form);
+      let { status } = await Goods.update(this.id, this.form);
       if (status) {
         this.$message.success("更新商品成功！");
       }
@@ -443,15 +442,5 @@ export default {
 
 .el-upload img {
   max-width: 100%;
-}
-
-.w-e-toolbar {
-  border: 1px solid #ccc;
-  border-bottom: 0;
-}
-
-.w-e-text-container {
-  border: 1px solid #ccc;
-  min-height: 300px;
 }
 </style>
