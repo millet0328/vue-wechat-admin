@@ -18,8 +18,6 @@ const Update = async ({ commit, state }, formData) => {
     return { status, msg };
 };
 export default {
-    Login,
-    Register,
     LoadInfo,
     Update,
 }
